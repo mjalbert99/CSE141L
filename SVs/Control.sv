@@ -2,7 +2,7 @@
 module Control #(parameter opwidth = 3, mcodebits = 9)(
   input [mcodebits-1:0] instr,    // subset of machine code (any width you need)
   output logic RegDst, Branch, 
-     MemtoReg, MemWrite, ALUSrc, RegWrite,
+     MemtoReg, MemWrite, ALUSrc, RegWrite, Add,
   output logic[opwidth-1:0] ALUOp);	   // for up to 8 ALU operations
 
 always_comb begin
@@ -14,6 +14,7 @@ always_comb begin
   ALUSrc 	=	'b0;   // 1: immediate  0: second reg file output
   RegWrite  =	'b1;   // 0: for store or no op  1: most other operations 
   MemtoReg  =	'b0;   // 1: load -- route memory instead of ALU to reg_file data in
+  Add 		= 'b0;
   ALUOp	    =   'b111; // y = a+0;
 // sample values only -- use what you need
 case(instr[8:6])    // override defaults with exceptions
@@ -21,7 +22,9 @@ case(instr[8:6])    // override defaults with exceptions
 
   3'b001: begin 								// add 
 				ALUOp      = 'b001;
-				ALUSrc 	  = 'b1; 
+				ALUSrc 	  = 'b1;
+				Add		= 'b1;
+				RegDst = 'b1; 
 			  end
   3'b010:  ALUOp 		= 'b010;  				// xor  
   3'b011:  begin				  				// bne

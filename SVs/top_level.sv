@@ -9,8 +9,11 @@ module top_level(
               prog_ctr;
   wire[7:0]   datA,datB,		  // from RegFile
               muxB, 
-			     rslt,               // alu output
-              immed;
+			         rslt,               // alu output
+              immed,
+				      regWriteData,
+				      regDataIn;
+				  
   //logic sc_in,   				  // shift/carry out from/to ALU
   // 		pariQ,              	  // registered parity flag from ALU
   //	zeroQ;                    // registered zero flag from ALU 
@@ -22,7 +25,8 @@ module top_level(
 		  MemWrite, 		  
 		  ALUSrc, 			  
 		  RegWrite, 		  
-		  MemtoReg;
+		  MemtoReg,
+      Add;
   
 		  //pari,
           //zero,
@@ -30,7 +34,6 @@ module top_level(
 		  //sc_en,
  		  
   wire[A-1:0]	ALUOp;	
-  //wire[A-1:0] alu_cmd;		  // Might not be necessary since ALUOp from Control~~~~~~~~
   
   wire[8:0]   mach_code;          // machine code
   wire[2:0]   rd_addrA, rd_adrB; // address pointers to reg_file
@@ -49,49 +52,56 @@ module top_level(
   // lookup table to facilitate jumps/branches
   PC_LUT #(.D(D))
     pl1 (
-		.addr  (rslt), 				// DOUBLE CHECK~~~~~~~~
+		.addr  (rslt), 	
 		.branch (Branch),
-        .target          
+       .target          
 		);	 
 
 
   // contains machine code
   instr_ROM ir1(
 				.prog_ctr,
-                .mach_code
+            .mach_code
 				);
 
 
   // control decoder
   Control ctl1(
-			.instr(mach_code),   // Connect instruction UNSURE~~~~~~~~~
+			.instr(mach_code),
 			.RegDst   , 
 			.Branch   , 
 			.MemWrite , 
 			.ALUSrc   , 
 			.RegWrite ,     
 			.MemtoReg ,
+      .Add,
 			.ALUOp     
 			);
 			
 			
-  assign rd_addrA = mach_code[2:0];
-  assign rd_addrB = mach_code[5:3];
-  //assign alu_cmd  = mach_code[8:6]; // Might not be necessary since ALUOp from Control~~~~~~~~
+  assign rd_addrA = mach_code[1:0];
+  assign rd_addrB = mach_code[3:2];
+  assign immediateBits = RegDst ? rd_addrA : mach_code[3:0]; // 4 bit or 2 it immediate
+  assign add = Add ? mach_code[1:0] : immediateBits;
 
-  reg_file #(.pw(3)) rf1(.dat_in(rd_addrB),	   // loads, most ops DOUBLE CHECK Entire Module~~~~~~~
+  assign AddrB = RegDst ? rd_addrB : mach_code[5:4];
+  
+  assign wr_addrC = RegDst ? mach_code[5:4] : rd_addrB;
+
+  reg_file #(.pw(3)) rf1(.dat_in(regDataIn),	   // loads, most ops DOUBLE CHECK Entire Module~~~~~~~
               .clk         ,
               .wr_en   (RegWrite),
-              .rd_addrA(rd_addrA),
-              .rd_addrB(rd_addrB),
-              .wr_addr (rd_addrA),      // in place operation
+              .rd_addrA(add),
+              .rd_addrB(AddrB),
+              .wr_addr (wr_addrC),      // in place operation
               .datA_out(datA),
-              .datB_out(datB)); 
+              .datB_out(datB)
+				  ); 
 
   assign muxB = ALUSrc? immed : datB;		// Adds option for immediate values or double register values
   alu alu1(
 		 .alu_cmd(ALUOp),
-         .inA    (datA),
+       .inA    (datA),
 		 .inB    (muxB),
 		 .rslt
 		 //.sc_i   (sc),   // output from sc register
@@ -101,12 +111,13 @@ module top_level(
 
 		  
   dat_mem dm1(.dat_in(datB)  ,  // from reg_file DOUBLE CHECK~~~~~~~~
-             .clk           ,
+           .clk           ,
 			 .wr_en  (MemWrite), // stores
-			 .addr   (datA),
-          .dat_out()				// ADD CODE HERE  datB breaks it ~~~~~~~~~~~~
+			 .addr   (rslt),
+          .dat_out(regWriteData)				// ADD CODE HERE  datB breaks it ~~~~~~~~~~~~
 			 );		  
 
+assign regDataIn = ALUSrc ? rslt : regWriteData; 
 
 // registered flags from ALU
 //  always_ff @(posedge clk) begin
