@@ -30,4 +30,4 @@ The ALU is unit that will take in the memory from the register file(s) and/or an
 
 ## Dat_Mem
 ![](images/dat_mem.png)
-Thhe data memory unit is the component used to fetch or write to the core memory of the system. In takes in a clock input, a write enable input(provided by the control), and data_in(a register provided in the ALU) to perform write operations. Additionally it has an address, which is the result of the ALU, to take where in memory will be accessed or written to. It then will output the data that was accessed, which will be fed back to the register file.
+The data memory unit is the component used to fetch or write to the core memory of the system. In takes in a clock input, a write enable input(provided by the control), and data_in(a register provided in the ALU) to perform write operations. Additionally it has an address, which is the result of the ALU, to take where in memory will be accessed or written to. It then will output the data that was accessed, which will be fed back to the register file.
