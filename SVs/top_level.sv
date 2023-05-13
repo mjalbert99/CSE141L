@@ -2,7 +2,7 @@
 module top_level(
   input        clk, reset, //req, 
   output logic done);
-  parameter D = 12,             // program counter width
+  parameter D = 10,             // program counter width
     A = 3;             		  // ALU command bit width
 	
   wire[D-1:0] target, 			  // jump 
@@ -54,14 +54,14 @@ module top_level(
     pl1 (
 		.addr  (rslt), 	
 		.branch (Branch),
-       .target          
+    .target          
 		);	 
 
 
   // contains machine code
   instr_ROM ir1(
 				.prog_ctr,
-            .mach_code
+          .mach_code
 				);
 
 
@@ -110,10 +110,11 @@ module top_level(
 		 );
 
 		  
-  dat_mem dm1(.dat_in(datB)  ,  // from reg_file DOUBLE CHECK~~~~~~~~
+  dat_mem dm1(
+           .dat_in(datB)  ,  // from reg_file DOUBLE CHECK~~~~~~~~
            .clk           ,
-			 .wr_en  (MemWrite), // stores
-			 .addr   (rslt),
+			     .wr_en  (MemWrite), // stores
+			     .addr   (rslt),
           .dat_out(regWriteData)				// ADD CODE HERE  datB breaks it ~~~~~~~~~~~~
 			 );		  
 

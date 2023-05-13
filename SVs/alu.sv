@@ -10,14 +10,14 @@ always_comb begin
   rslt = 'b0;
 
   case(alu_cmd)
-	3'b000	: rslt = inA & inB;  						// AND
-	3'b001	: rslt = inA + inB;							// ADD
-	3'b010	: rslt = inA ^ inB; 						// XOR
-	3'b011	: rslt = (inA != inB) ? 8'b1 : 8'b0;   		// BNE
-	3'b100	: rslt = inA << inB;  						// LS
-	3'b101	: rslt = inA >> inB;  						// RS
-	3'b110	: rslt = inA + inB;  				    	// LW
-	3'b111	: rslt = inA + inB;  			
+	3'b000	: rslt = inB & inA;  						// AND
+	3'b001	: rslt = inB + inA;							// ADD
+	3'b010	: rslt = inB ^ inA; 						// XOR
+	3'b011	: rslt = (inB != inA) ? 8'b1 : 8'b0;   		// BNE
+	3'b100	: rslt = inB << inA;  						// LS
+	3'b101	: rslt = inB >> inA;  						// RS
+	3'b110	: rslt = inB + inA;  				    	// LW
+	3'b111	: rslt = inB + inA;  			
 	default	: rslt = 8'bx;  								// FALL THROUGH
 															// x's so we know it fell through
   endcase
