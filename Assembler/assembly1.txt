@@ -413,7 +413,7 @@ LS r0, #1
 ADD r0, r0, #3
 ADD r0, r0, #2                              // r0 = 75
 STR r2, r0
---------------------------
+
 RS r0, #4
 LS r0, #3
 ADD r0, r0, #3
@@ -425,7 +425,7 @@ LW r1, r3
 
 ADD r0, r0, #1                          // r0 = 71
 LW r0, r0
-
+--------------------------
 LS r2, #5
 RS r1, #3
 XOR r2, r2, r1
@@ -442,12 +442,12 @@ ADD r3, r3, #3
 ADD r3, r3, #3
 ADD r3, r3, #3
 ADD r3, r3, #3
-ADD r3, r3, #2                       // Adds 29 to address
+ADD r3, r3, #3                       // Adds 30 to address
 STR r2, r3
 
 RS r3, #8
 ADD r3, r3, #1
-LS r3, #3
+LS r3, #5
 ADD r3, r3, #3
 LS r3, #1                            // r3 = 70
 LW r3, r3
@@ -464,7 +464,7 @@ RS r1, #7
 
 RS r3, #8
 ADD r3, r3, #1
-LS r3, #3
+LS r3, #5
 ADD r3, r3, #3
 LS r3, #1           
 ADD r3, r3, #2                       // r3 = 72
