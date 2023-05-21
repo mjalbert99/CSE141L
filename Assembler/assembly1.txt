@@ -1,0 +1,538 @@
+// Works assuming mem[62] = 1, 63 = 2, 64 = 4, 65 = 8, 66 = 16
+// 67 = 32, 68 = 64, 69 = 128
+// Assumes intialize r0 = 70, r1=r2=r3 = 0
+// COunter stored at mem[70]
+STR r3, r0
+Loop:
+RS r0, #3
+LS r0, #3  // r0 = 64
+LW r2, r0  
+LW r1, r3 // Loads first half of message
+AND r2, r2, r1
+RS r2, #2
+
+RS r0, #4
+ADD r0, r0, #3
+LS r0, #2
+ADD r0, r0, #3
+LS r0, #1
+ADD r0, r0, #1      // r0 = 63
+LW r0, r0
+AND r0, r1, r0
+RS r0, #1
+XOR r2, r2, r0
+
+RS r0, #1          // r0 = 0
+ADD r0, r0, #3
+LS r0, #2
+ADD r0, r0, #3
+LS r0, #2
+ADD r0, r0, #2
+LS r0, #1           // r0 = 62
+LW r0, r0
+AND r0, r0, r1
+XOR r2, r2, r0
+
+ADD r3, r3, #1
+RS r0, #1
+ADD r0, r0, #1
+LS r0, #4
+ADD r0, r0, #1
+LS r0, #2
+ADD r0, r0 #1       // r0 = 69
+LW r0, r0
+LW r1, r3
+AND r0, r0, r1
+RS r0, #7
+XOR r2, r2, r0
+
+RS r0, #1
+ADD r0, r0, #1
+LS r0, #4
+ADD r0, r0, #1
+LS r0, #2           // r0 = 68
+LW r0, r0
+AND r0, r0, r1
+RS r0, #6
+XOR r2, r2, r0
+
+RS r0, #1
+ADD r0, r0, #1
+LS r0, #6
+ADD r0, r0, #3      // r0 = 67
+LW r0, r0
+AND r0, r0, r1
+RS r0, #5
+XOR r2, r2, r0
+
+RS r0, #1
+ADD r0, r0, #1
+LS r0, #6
+ADD r0, r0, #2      // r0 = 66
+LW r0, r0
+AND r0, r0, r1
+RS r0, #4
+XOR r2, r2, r0
+
+RS r0, #1
+ADD r0, r0, #1
+LS r0, #5
+ADD r0, r0, #3
+LS r0, #1
+ADD r0, r0, #1      // r0 = 71
+STR r2, r0
+
+RS r0, #1
+LS r0, #1       // r0 = 70
+LW r3, r0
+LW r1, r3
+
+RS r0, #3
+LS r0, #3      // r0 = 64
+LW r0, r0
+AND r2, r1, r0
+RS r2, #2
+
+RS r0, #8
+ADD r0, r0, #3
+LS r0, #2
+ADD r0, r0, #3
+LS r0, #1
+ADD r0, r0, #1      // r0 = 63
+LW r0, r0
+AND r0, r1, r0
+RS r0, #1
+XOR r2, r2, r0
+
+RS r0, #1          // r0 = 0
+ADD r0, r0, #3
+LS r0, #2
+ADD r0, r0, #3
+LS r0, #2
+ADD r0, r0, #2
+LS r0, #1           // r0 = 62
+LW r0, r0
+AND r0, r1, r0
+XOR r2, r2, r0
+
+ADD r3, r3, #1
+LW r1, r3
+RS r0, #1
+ADD r0, r0, #1
+LS r0, #4
+ADD r0, r0, #1
+LS r0, #2
+ADD r0, r0 #1       // r0 = 69
+LW r0, r0
+AND r0, r0, r1
+RS r0, #7
+XOR r2, r2, r0
+
+RS r0, #1
+ADD r0, r0, #1
+LS r0, #6
+ADD r0, r0, #1      // r0 = 65
+LW r0, r0
+AND r0, r0, r1
+RS r0, r0, #3
+XOR r2, r2, r0
+
+RS r0, #1
+ADD r0, r0, #1
+LS r0, #6           // r0 = 64
+LW r0, r0
+AND r0, r0, r1
+RS r0, r0, #2
+XOR r2, r2, r0
+
+RS r0, #1
+ADD r0, r0, #3
+LS r0, #2
+ADD r0, r0, #3
+LS r0, #1
+ADD r0, r0, #1      // r0 = 63
+LW r0, r0
+AND r0, r0, r1
+RS r0, #1
+XOR r2, r2, r0
+
+RS r0, #1
+ADD r0, r0, #1
+LS r0, #5
+ADD r0, r0, #3
+LS r0, #1
+ADD r0, r0, #2      // r0 = 72
+STR r2, r0
+
+RS r0, #4
+LS r0, #2
+ADD r0, r0, #3
+LS r0, #1           // r0 = 70
+LW r3, r0
+LW r1, r3
+
+RS r0, #8
+ADD r0, r0, #1
+LS r0, #6           // r0 = 64
+LW r0, r0
+AND r2, r1, r0
+RS r2, #2
+
+RS r0, #8
+ADD r0, r0, #3
+LS r0, #2
+ADD r0, r0, #3
+LS r0, #1
+ADD r0, r0, #1      // r0 = 63
+LW r0, r0
+AND r0, r1, r0
+RS r0, #1
+XOR r2, r2, r0
+
+ADD r3, r3, #1
+LW r1, r3
+RS r0, #1
+ADD r0, r0, #1
+LS r0, #4
+ADD r0, r0, #1
+LS r0, #2           // r0 = 68
+LW r0, r0
+AND r0, r0, r1
+RS r0, #6
+XOR r2, r2, r0
+
+RS r0, #1
+ADD r0, r0, #1
+LS r0, #6
+ADD r0, r0, #3      // r0 = 67
+LW r0, r0
+AND r0, r0, r1
+RS r0, #5
+XOR r2, r2, r0
+
+RS r0, #1
+ADD r0, #1
+LS r0, #6
+ADD r0, r0, #1      // r0 = 65
+LW r0, r0
+AND r0, r0, r1
+RS r0, #3
+XOR r2, r2, r0
+
+RS r0, #1
+ADD r0, r0, #1
+LS r0, #6           // r0 = 64
+LW r0, r0
+AND r0, r0, r1
+RS r0, #2
+XOR r2, r2, r0
+
+RS r0, #1          // r0 = 0
+ADD r0, r0, #3
+LS r0, #2
+ADD r0, r0, #3
+LS r0, #2
+ADD r0, r0, #2
+LS r0, #1           // r0 = 62
+LW r0, r0
+AND r0, r0, r1
+XOR r2, r2, r0
+
+RS r0, #1
+ADD r0, r0, #1
+LS r0, #5
+ADD r0, r0, #3
+LS r0, #1
+ADD r0, r0, #3      // r0 = 73
+STR r2, r0
+
+RS r0, #4
+LS r0, #3
+ADD r0, r0, #3
+LS r0, #1           // r0 = 70
+LW r3, r0
+LW r1, r3
+RS r0, #8
+ADD r0, r0, #1
+LS r0, #6           // r0 = 64
+AND r2, r0, r1
+RS r2, r2, #2 
+
+RS r0, #8          // r0 = 0
+ADD r0, r0, #3
+LS r0, #2
+ADD r0, r0, #3
+LS r0, #2
+ADD r0, r0, #2
+LS r0, #1           // r0 = 62
+LW r0, r0
+AND r0, r0, r1
+XOR r2, r2, r0
+
+ADD r3, r3, #1
+LW r1, r3
+RS r0, #1
+ADD r0, r0, #1
+LS r0, #4
+ADD r0, r0, #1
+LS r0, #2           // r0 = 68
+LW r0, r0
+AND r0, r0, r1
+RS r0, $6
+XOR r2, r2, r0
+
+RS r0, #1
+ADD r0, r0, #1
+LS r0, #6
+ADD r0, r0, #2      // r0 = 66
+LW r0, r0
+AND r0, r0, r1
+RS r0, #4
+XOR r2, r2, r0
+
+RS r0, #1
+ADD r0, #1
+LS r0, #6
+ADD r0, r0, #1      // r0 = 65
+LW r0, r0
+AND r0, r0, r1
+RS r0, #3
+XOR r2, r2, r0
+
+RS r0, #8
+ADD r0, r0, #3
+LS r0, #2
+ADD r0, r0, #3
+LS r0, #1
+ADD r0, r0, #1      // r0 = 63
+LW r0, r0
+AND r0, r0, r1
+RS r0, #1
+XOR r2, r2, r0
+
+RS r0, #1          // r0 = 0
+ADD r0, r0, #3
+LS r0, #2
+ADD r0, r0, #3
+LS r0, #2
+ADD r0, r0, #2
+LS r0, #1           // r0 = 62
+LW r0, r0
+AND r0, r0, r1
+XOR r2, r2, r0
+
+RS r0, #1
+ADD r0, r0, #1
+LS r0, #5
+ADD r0, r0, #3
+LS r0, #1
+ADD r0, r0, #3      
+ADD r0, r0, #1      // r0 = 74
+STR r2, r0
+
+RS r0, #4
+LS r0, #3
+ADD r0, r0, #3
+LS r0, #1
+ADD r0, r0, #1      // r0 = 71
+LW r2, r0
+
+LW r1, r3
+RS r0, #6
+LS r0, #6
+ADD r0, r0, #1      // r0 = 65
+LW r0, r0
+AND r0, r0, r1
+RS r0, #3
+XOR r2, r2, r0
+
+RS r0, #1
+ADD r0, r0, #1
+LS r0, #6       // r0 = 64
+LW r0, r0
+AND r0, r0, r1
+RS r0, #2
+XOR r2, r2, r0
+
+RS r0, #8
+ADD r0, r0, #3
+LS r0, #2
+ADD r0, r0, #3
+LS r0, #1
+ADD r0, r0, #1      // r0 = 63
+AND r0, r0, r1
+RS r0, #1
+XOR r2, r2, r0
+
+RS r0, #8
+ADD r0, r0, #3
+LS r0, #2
+ADD r0, r0, #3
+LS r0, #1 // r0 = 62
+AND r0, r0, r1
+RS r0, #1
+XOR r2, r2, r0
+
+LS r0, #3
+ADD r0, r0, #3
+LS r0, #1
+ADD r0, r0, #1      // r0 = 71
+LW r0, r0
+XOR r2, r2, r0
+
+RS r0, #8
+ADD r0, r0, #1
+LS r0, #3
+ADD r0, r0, #3
+LS r0, #1
+ADD r0, r0, #2      // r0 = 72
+LW r0, r0
+XOR r2, r2, r0
+
+RS r0, #8
+ADD r0, r0, #1
+LS r0, #3
+ADD r0, r0, #3
+LS r0, #1
+ADD r0, r0, #3      // r0 = 73
+LW r0, r0
+XOR r2, r2, r0
+
+RS r0, #8
+ADD r0, r0, #1
+LS r0, #3
+ADD r0, r0, #3
+LS r0, #1
+ADD r0, r0, #3
+ADD r0, r0, #1      // r0 = 74
+LW r0, r0
+XOR r2, r2, r0
+
+RS r0, #8
+ADD r0, r0, #1
+LS r0, #3
+ADD r0, r0, #3
+LS r0, #1
+ADD r0, r0, #3
+ADD r0, r0, #2      // r0 = 75
+STR r2, r0
+
+RS r0, #4
+LS r0, #3
+ADD r0, r0, #3
+LS r0, #1           // r0 = 70
+LW r3, r0
+LW r2, r3
+ADD r3, r3, 1
+LW r1, r3
+
+ADD r0, r0, #1  // r0 = 71
+LW r0, r0
+
+LS r2, #5
+RS r1, #3
+XOR r2, r2, r1
+RS r2, #1
+LS r2, #1
+XOR r2, r2, r0
+
+ADD r3, r3, #3
+ADD r3, r3, #3
+ADD r3, r3, #3
+ADD r3, r3, #3
+ADD r3, r3, #3
+ADD r3, r3, #3
+ADD r3, r3, #3
+ADD r3, r3, #3
+ADD r3, r3, #3
+ADD r3, r3, #2      // Adds 29 to address
+STR r2, r3
+
+RS r3, #8
+ADD r3, r3, #1
+LS r3, #3
+ADD r3, r3, #3
+LS r3, #1           // r3 = 70
+LW r3, r3
+ADD r3, r3, #1
+
+LW r0, r3
+LW r2, r3
+
+RS r0, #1
+LS r0, #5
+
+LS r1, #7
+RS r1, #7
+
+RS r3, #8
+ADD r3, r3, #1
+LS r3, #3
+ADD r3, r3, #3
+LS r3, #1           
+ADD r3, r3, #2      // r3 = 72
+LW r2, r3
+LS r2, #1
+XOR r1, r1, r2
+LS r1, #1
+
+ADD r3, r3, #1     // r3 = 73
+LW r2, r3
+XOR r1, r1, r2
+LS r1, #1
+
+ADD r3, r3, #1      // r3 = 74
+LW r2, r3
+XOR r1, r1, r2
+LS r1, #1
+
+ADD r3, r3, #1      // r3 = 75
+LW r2, r3
+XOR r1, r1, r2
+XOR r0, r0, r1
+
+RS r3, #8
+ADD r3, r3, #1
+LS r3, #5
+ADD r3, r3, #3
+LS r3, #1       // r3 = 70
+LW r3, r3
+
+ADD r3, r3, #3
+ADD r3, r3, #3
+ADD r3, r3, #3
+ADD r3, r3, #3
+ADD r3, r3, #3
+ADD r3, r3, #3
+ADD r3, r3, #3
+ADD r3, r3, #3
+ADD r3, r3, #3
+ADD r3, r3, #3      
+ADD r3, r3, #1      // Adds 31 to address
+STR r0, r3
+
+RS r3, #8
+ADD r3, r3, #1
+LS r3, #5
+ADD r3, r3, #3
+LS r3, #1       // r3 = 70
+LW r3, r3
+ADD r3, r3, #2
+
+RS r1, #8
+ADD r1, r1, #1
+LS r1, #5
+ADD r1, r1, #3
+LS r1, #1       // r1 = 70
+STR r3, r1      // update counter
+
+RS r2, #8
+ADD r2, r2, #1 
+LS r2, #2
+ADD r2, r2, #3
+LS r2, #2
+ADD r2, r2, #2      // r2 = 30
+
+RS r1, #8           // access 0 index of LUT
+
+BNE r3, r2, r1
