@@ -1,0 +1,270 @@
+ADD r3, r3, 0						# Counter for loop
+SW r3, memory						# Store the value of the counter
+
+Loop: 								# Main loop for all 15 messages
+
+	# PARITY BITS
+	# r1 and r2 will be temp registers while r3 will hold parity bits that will be stored
+	
+	# p8
+	LW r0, memory for 4
+	LW r1, mem[r3]					# get first half of message based on counter position(indexing)
+	AND r2, r1, r0  			#  AND r2, mem[15:8], 4(00000100)
+	RS r2, r2, 2					# Aligns bits ofr XOR
+-------------------------------------	
+	LW r0, memory for 2	
+	AND r0, r1, r0 					#  AND r3, mem[15:8], 2(00000010) 
+	RS r0, r0, 1					# Aligns bits for XOR
+	XOR r2, r2, r0 					#b11 ^ b10
+--------------------------------------
+	LW r0, memory for 1	
+	AND r0, r0, r1 					#  AND r3, mem[15:8], 1(000000001)
+	XOR r2, r2, r0 					# b11 ^ b10 ^ b9
+------------------------------------------------
+	ADD r3, r3, 1					# increment index in memory to get next byte(second half of message)
+	LW r0, memory for 128	
+	LW r1, mem[r3]	
+	AND r0, r0, r1	
+	RS r0, r0, 7
+	XOR r2, r2, r0 					# b11 ^ b10 ^b9 ^ b8
+-------------------------------------------------	
+	LW r0, memory for 64	
+	AND r0, r0, r1	
+	RS r0, r0, 6
+	XOR r2, r2, r0 					# b11 ^ b10 ^b9 ^ b8 ^ b7
+--------------------------------------------------------------------
+	LW r0, memory for 32	
+	AND r0, r0, r1	
+	RS, r0, r0, 5
+	XOR r2, r2, r0 					# b11 ^ b10 ^b9 ^ b8 ^ b7 ^ b6
+-----------------------------------	
+	LW r0, memory for 16	
+	AND r0, r0, r1	
+	RS r0, r0, 4
+	XOR r2, r2, r0 					# b11 ^ b10 ^b9 ^ b8 ^ b7 ^ b6 ^ b5
+-----------------------------------------------------------------------	
+	SW r2, memory					 # store p8
+-----------------------------------------------------------------------		
+	# p4	
+	LW r3, memory for counter	
+	LW r1, mem[r3]	
+	LW r0, memory for 4	
+	AND r2, reg2, reg1 				#  AND r2, mem[r3], 4(0000100)
+	RS r2, r2, 2
+--------------------------------------------------------------------------			
+	LW r0, memory for 2		
+	AND r0, r1, r0 					#  AND r0, mem[r3], 2(00000010) 
+	RS r0, r0, 1
+	XOR r2, r2, r0 					#b11 ^ b10
+-----------------------------------------------------------------------		
+	LW r0, memory for 1		
+	AND r0, r0, r1 					#  AND r0, mem[r3], 1(000000001)
+	XOR r2, r2, r0 					# b11 ^ b10 ^ b9
+---------------------------------------------------------------------		
+	ADD r3, r3, 1					# increment spot in memory to get next set byte
+	LW r0, memory for 128		
+	LW r1, mem[r3]		
+	AND r0, r0, r1	
+	RS r0, r0, 7
+	XOR r2, r2, r0 					# b11 ^ b10 ^b9 ^ b8
+----------------------------------------------------------------------			
+	LW r0, memory for 8		
+	AND r0, r0, r1	
+	RS r0, r0, 3
+	XOR r2, r2, r0 					# b11 ^ b10 ^b9 ^ b8 ^ b4
+-----------------------------------------------------------------			
+	LW r0, memory for 4		
+	AND r0, r0, r1		
+	RS r0, r0, 2
+	XOR r2, r2, r0 					# b11 ^ b10 ^b9 ^ b8 ^ b4 ^ b3
+-------------------------------------------------------------------		
+	LW r0, memory for 2		
+	AND r0, r0, r1	
+	RS r0, r0, 1
+	XOR r2, r2, r0 					# b11 ^ b10 ^b9 ^ b8 ^ b4 ^ b3 ^ b12
+------------------------------------------------------------------------		
+	SW r2, memory 					# store p4
+-------------------------------------------------------------------------	
+	# p2	
+	LW r3, memory for counter	
+	LW r0, memory for 4	
+	LW r1, mem[r3]	
+	AND r2, reg2, reg1 				#  AND r2, mem[r3][15:8], 4(0000100)
+	RS r2, r2, 2
+---------------------------------------------------------------------		
+	LW r0, memory for 2	
+	AND r0, r1, r0 					#  AND r0, mem[r3][15:8], 2(00000010) 
+	RS, r0, r0, 1
+	XOR r2, r2, r0 					#b11 ^ b10
+	-----------------------------------------------------------------------
+	ADD r3, r3, 1					# increment spot in memory to get next byte
+	LW r0, memory for 64	
+	LW r1, mem[r3]	
+	AND r0, r0, r1	
+	RS r0, r0, 6
+	XOR r2, r2, r0 					# b11 ^b10 ^ b7
+---------------------------------------------------------------------	
+	LW r0, memory for 32	
+	AND r0, r0, r1	
+	RS, r0, r0, 5
+	XOR r2, r2, r0 					# b11 ^b10 ^ b7 ^ b6
+--------------------------------------------------------------		
+	LW r0, memory for 8	
+	AND r0, r0, r1	
+	RS r0, r0, 3
+	XOR r2, r2, r0 					# b11 ^b10 ^ b7 ^ b6 ^ b4
+--------------------------------------------------------------------------		
+	LW r0, memory for 4	
+	AND r0, r0, r1	
+	RS r0, r0, 2
+	XOR r2, r2, r0 					# b11 ^b10 ^ b7 ^ b6 ^ b4 ^ b3
+------------------------------------------------------------------------		
+	LW r0, memory for 1	
+	AND r0, r0, r1	
+	XOR r2, r2, r0 					# b11 ^b10 ^ b7 ^ b6 ^ b5 ^ b4 ^ b1
+----------------------------------------------------------------------		
+	SW r2, memory 					# store p2
+----------------------------------------------------------------------		
+	# p1	
+	LW r3, memory for counter	
+	LW r1, mem[r3]	
+	LW r0, memory for 4	
+	AND r2, r0, r1	
+	RS r2, r2, 2
+------------------------------------------------		
+	LW r0, memory for 1	
+	AND r0, r0, r1	
+	XOR r2, r2, r0					# b11 ^ b9
+-------------------------------------------------------		
+	ADD r3, r3, 1 					# increment spot in memory to get next set of bytes
+	LW r0, memory for 64	
+	LW r1 mem[r3]	
+	AND r0, r0, r1
+	RS r0, r0, 6
+	XOR r2, r2, r0 					# b11 ^ b9 ^ b7
+----------------------------------------------------------		
+	LW r0, memory for 16	
+	AND r0, r0, r1	
+	RS, r0, r0, 4
+	XOR r2, r2, r0 					# b11 ^ b9 ^b7 ^ b5
+------------------------------------------------------------------------		
+	LW r0, memory for 8	
+	AND r0, r0, r1	
+	RS r0, r0, 3
+	XOR r2, r2, r0 					# b11 ^ b9 ^b7 ^ b5	 ^ b4
+-----------------------------------------------------------------------------		
+	LW r0, memory for 2	
+	AND r0, r0, r1	
+	RS, r0, r0, 1
+	XOR r2, r2, r0					 # b11 ^ b9 ^b7 ^ b5	 ^ b4 ^ b2
+	-------------------------------------------------------------------------	
+	LW r0, memory for 1	
+	AND r0, r0, r1	
+	XOR r2, r2, r0 					# b11 ^ b9 ^b7 ^ b5	 ^ b4 ^ b2 ^ b1	
+	------------------------------------------------------------------------
+	SW r2, memory 					# store p1
+	--------------------------------------------------------------------
+	# p0	
+	LW r2, memory for p8	
+------------------------------------	
+	LW r0, memory for 8	
+	LW r1, mem[r3]	
+	AND r0, r0, r1	
+	RS, r0, r0, 3
+	XOR r2, r2, r0 					# b11:b5 ^ b4
+-------------------------------------------------------		
+	LW r0, memory for 4	
+	AND r0, r0, r1	
+	RS r0, r0, 2
+	XOR r2, r2, r0 					# b11:b5 ^ b4 ^ b3
+--------------------------------------------------------------		
+	LW r0, memory for 2	
+	AND r0, r0, r1	
+	RS r0, r0, 1
+	XOR r2, r2, r0 					# b11:b5 ^ b4 ^ b3 ^ b2
+----------------------------------------------------------------		
+	LW r0, memory for 1	
+	AND r0, r0, r1
+	XOR r2, r2, r0 					# b11:b1
+----------------------------------------------------------------------		
+	LW r0, memory for p8	
+	XOR r2, r2, r0 					# b11:b1 ^ p8
+-----------------------------------------------------------------------		
+	LW r0, memory for p4	
+	XOR r2, r2, r0 					# b11:b1 ^ p8 ^ p4
+-------------------------------------------------------------------		
+	LW r0, memory for p2	
+	XOR r2, r2, r0					# b11:b1 ^ p8 ^ p4 ^ p2
+---------------------------------------------------------------------		
+	LW r0, memory for p1	
+	XOR r2, r2, r0 					# b11:b1 ^ p8 ^ p4 ^p2 ^ p1
+	SW r2, memory 					# store p0 in memory
+--------------------------------------------------------------		
+	# STORING
+	# r2 and r1 are freed now to be used 
+	
+	LW r3, memory for counter 		# get counter from memory for indexing
+	LW r2, mem[r3]					# get first set of byte
+	AND r3, r3, 1					# increment the index
+	LW r1, mem[r3] 					# get second set of byte
+--------------------------------------------------------------------------		
+	LW r2, memory for p8 			# load p8 parity bit
+----------------------------------------------------------------	
+	# First half of encoded message
+	
+	LS r2, r2, 5					# left shift by 5 ->	b11 b10 b9 0 0 0 0 0
+	RS r1, r1, 3					# right shift by 3 ->	0 0 0 b8 b7 b6 b5 b4
+	XOR r2, r2, r1  				# combine -> 			b11 b10 b9 b8 b7 b6 b5 b4 
+	RS r2, r2, 1					# get rid of r3 ->		 0 b11 b10 b9 b8 b7 b6 b5 
+	LS r2, r2, 1					# get ready for parity bit ->		 b11 b10 b9 b8 b7 b6 b5 0
+	XOR r2, r2, r0					# include parity bit ->		b11 b10 b9 b8 b7 b6 b5 p8
+--------------------------------------------------------------------------------	
+	ADD r3, r3, 4 
+	ADD r3, r3, 4
+	ADD r3, r3, 4
+	ADD r3, r3, 4
+	ADD r3, r3, 4
+	ADD r3, r3, 4
+	ADD r3, r3, 4
+	ADD r3, r3, 2 # 30 from base counter
+	SW r0, mem[r3]
+-------------------------------------------------------------------------	
+	# Second half of encoded message
+	LW r0, mem[r3]					# loads b8 b7 b6 b5 b4 b3 b2 b1
+	LW r1, mem[r3]					# loads b8 b7 b6 b5 b4 b3 b2 b1
+--------------------------------------------------------------------				
+	RS r0, r0, 1					# 0 b8 b7 b6 b5 b4 b3 b2
+	LS r0, r0, 5					# b4 b3 b2 0 0 0 0 0
+-------------------------------------------------------------------				
+	LS r1, r1, 7					# b1 0 0 0 0 0 0 0
+	RS r1, r1, 7					# 0 0 0 0 0 0 0 b1
+------------------------------------------------------------	
+	LW r2, memory for p4	
+	LS r2, r2, 1					# 0 0 0 0 0 0 p4 0
+	XOR r1, r1, r2					# 0 0 0 0 0 0 p4 b1
+	LS r1, r1, 1					# 0 0 0 0 0 p4 b1 0
+-----------------------------------------------------------------
+	LW r2, memory for p2	
+	XOR r1, r1, r2					# 0 0 0 0 0 p4 b1 p2
+	LS r1, r1, 1					# 0 0 0 0 p4 b1 p2 0
+----------------------------------------------------------
+	LW r2, memory for p1	
+	XOR r1, r1, r2					# 0 0 0 0 p4 b1 p2 p1
+	LS r1, r1, 1					# 0 0 0 p4 b1 p2 p1 0
+------------------------------------------------
+	LW r2, memory for p0 	
+	XOR p2, p2, r2					# 0 0 0 p4 b1 p2 p1 p0
+	XOR r0, r0, r1					# b4, b3, b2, p4, b1, p2, p1, p0
+--------------------------------------------------------------------------		
+	ADD r3, r3, 1					# 31 from base counter
+	SW r0, mem[r3]
+-----------------------------------------------------------------	
+	# Stored both half of message
+	
+	# BRANCHING
+	LW r3, memory for counter		# get counter value
+	ADD r3, r3, 2					# increment counter since the message covers two bytes
+	LW r2, memory for 30
+	LW r1, memory for loop address	# CAN BE DONE WITH LUT
+
+	BNE r3, r2, r1 					# if( r3 != 30) goto loop label
