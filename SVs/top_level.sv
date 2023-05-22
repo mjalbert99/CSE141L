@@ -9,10 +9,10 @@ module top_level(
               prog_ctr;
   wire[7:0]   datA,datB,		  // from RegFile
               muxB, 
-			         rslt,               // alu output
+			  rslt,               // alu output
               immed,
-				      regWriteData,
-				      regDataIn;
+			  regWriteData,
+			regDataIn;
 				  
   //logic sc_in,   				  // shift/carry out from/to ALU
   // 		pariQ,              	  // registered parity flag from ALU
@@ -81,28 +81,27 @@ module top_level(
 			
   assign rd_addrA = mach_code[1:0];
   assign rd_addrB = mach_code[3:2];
-  assign immediateBits = RegDst ? rd_addrA : mach_code[3:0]; // 4 bit or 2 it immediate
-  assign add = Add ? mach_code[1:0] : immediateBits;
-
+  assign AddrA = RegDst ? rd_addrA : mach_code[3:0]; // 4 bit or 2 it immediate
   assign AddrB = RegDst ? rd_addrB : mach_code[5:4];
-  
-  assign wr_addrC = RegDst ? mach_code[5:4] : rd_addrB;
+
+  assign wr_addr = mach_code[5:4];
 
   reg_file #(.pw(3)) rf1(.dat_in(regDataIn),	   // loads, most ops DOUBLE CHECK Entire Module~~~~~~~
               .clk         ,
               .wr_en   (RegWrite),
-              .rd_addrA(add),
+              .rd_addrA(rd_addrA),
               .rd_addrB(AddrB),
-              .wr_addr (wr_addrC),      // in place operation
+              .wr_addr (wr_addr),      // in place operation
               .datA_out(datA),
               .datB_out(datB)
 				  ); 
 
-  assign muxB = ALUSrc? immed : datB;		// Adds option for immediate values or double register values
+  assign muxA = ALUSrc? AddrA : datA;		// Adds option for immediate values or double register values
+  
   alu alu1(
 		 .alu_cmd(ALUOp),
-       .inA    (datA),
-		 .inB    (muxB),
+       .inA    (muxA),
+		 .inB    (datB),
 		 .rslt
 		 //.sc_i   (sc),   // output from sc register
 		 //.sc_o   (sc_o), // input to sc register
