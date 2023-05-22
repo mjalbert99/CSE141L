@@ -42,7 +42,6 @@ module top_level(
   PC #(.D(D)) 					  // D sets program counter width
      pc1 (.reset            ,
          .clk               ,
-		 //.reljump_en (relj),
 		 .absjump_en (Branch),
 		 .target	         , 
 		 .prog_ctr          
@@ -84,23 +83,26 @@ module top_level(
   assign AddrA = RegDst ? rd_addrA : mach_code[3:0]; // 4 bit or 2 it immediate
   assign AddrB = RegDst ? rd_addrB : mach_code[5:4];
 
+  assign inA = Branch ? mach_code[3:2] : AddrA;   // Handles branching
+  assign inB = Branch ? mach_code[5:4] : AddrB;   // Handles branching
+
   assign wr_addr = mach_code[5:4];
 
   reg_file #(.pw(3)) rf1(.dat_in(regDataIn),	   // loads, most ops DOUBLE CHECK Entire Module~~~~~~~
               .clk         ,
               .wr_en   (RegWrite),
-              .rd_addrA(rd_addrA),
-              .rd_addrB(AddrB),
+              .rd_addrA(inA),
+              .rd_addrB(inB),
               .wr_addr (wr_addr),      // in place operation
               .datA_out(datA),
               .datB_out(datB)
 				  ); 
 
   assign muxA = ALUSrc? AddrA : datA;		// Adds option for immediate values or double register values
-  
+
   alu alu1(
 		 .alu_cmd(ALUOp),
-       .inA    (muxA),
+     .inA    (muxA),
 		 .inB    (datB),
 		 .rslt
 		 //.sc_i   (sc),   // output from sc register

@@ -28,9 +28,10 @@ case(instr[8:6])    // override defaults with exceptions
 			  end
   3'b010:  ALUOp 		= 'b010;  				// xor  
   3'b011:  begin				  				// bne
-					ALUOp			  = 'b011; 
+					ALUOp		  = 'b011; 
 					Branch 		  = 'b1;    
-					RegWrite 	  = 'b0; 
+					RegWrite 	  = 'b0;
+					RegDst		  = 'b1; 
 			end
   3'b100:  begin				  				// ls
 					ALUOp 		  = 'b011; 
