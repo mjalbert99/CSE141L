@@ -133,8 +133,4 @@ def convert(inFile, outFile1, outFile2):
 	assembly_file.close()
 	machine_file.close()
 
-#convert("assembly.txt", "machine.txt", "lut.txt")
-# convert("stringmatch.txt", "sm_machine.txt", "sm_lut.txt")
-# convert("cordic.txt", "c_machine.txt", "c_lut.txt")
-# convert("division.txt", "d_machine.txt", "d_lut.txt")
 convert("Assembler\Program1.txt", "Assembler\out.txt", "Assembler\out2.txt")
