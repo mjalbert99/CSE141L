@@ -9,7 +9,6 @@ module PC_LUT #(parameter D=10, A = 8)(
 		case(addr)
 			0: target = 2;   		// Program 1 Loop
 			1: target = 20;   		
-
 			default: target = 'b0;  // hold PC  
 		endcase
 	end
