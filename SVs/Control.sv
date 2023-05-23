@@ -16,7 +16,7 @@ always_comb begin
   MemtoReg  =	'b0;   // 1: load -- route memory instead of ALU to reg_file data in
   Add 		= 'b0;
   ALUOp	    =   'b111; // y = a+0;
-// sample values only -- use what you need
+
 case(instr[8:6])    // override defaults with exceptions
   3'b000: ALUOp 	  = 'b000;    				// and   
 
@@ -25,7 +25,7 @@ case(instr[8:6])    // override defaults with exceptions
 				ALUSrc 	  = 'b1;
 				Add		= 'b1;
 				RegDst = 'b1; 
-			  end
+		  end
   3'b010:  ALUOp 		= 'b010;  				// xor  
   3'b011:  begin				  				// bne
 					ALUOp		  = 'b011; 
@@ -66,5 +66,4 @@ case(instr[8:6])    // override defaults with exceptions
 endcase
 
 end
-	
 endmodule
