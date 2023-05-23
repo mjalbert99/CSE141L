@@ -12,17 +12,3 @@ module instr_ROM #(parameter D=10)(
   always_comb  mach_code = core[prog_ctr];
 
 endmodule
-
-
-/*
-sample mach_code.txt:
-
-001111110		 // ADD r0 r1 r0
-001100110
-001111010
-111011110
-101111110
-001101110
-001000010
-111011110
-*/
