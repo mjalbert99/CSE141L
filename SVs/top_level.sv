@@ -72,18 +72,21 @@ module top_level(
 			.ALUSrc   , 
 			.RegWrite ,     
 			.MemtoReg ,
-      .Add,
 			.ALUOp     
 			);
 			
 			
   assign rd_addrA = mach_code[1:0];
-  assign rd_addrB = mach_code[3:2];
   assign AddrA = RegDst ? rd_addrA : mach_code[3:0]; // 4 bit or 2 it immediate
-  assign AddrB = RegDst ? rd_addrB : mach_code[5:4];
-
-  assign inA = Branch ? mach_code[3:2] : AddrA;   // Handles branching
-  assign inB = Branch ? mach_code[5:4] : AddrB;   // Handles branching
+  assign addrA = MemtoReg ? mach_code[3:2] : AddrA;  // Handles loads
+  assign str_addrA = MemWrite ? mach_code[3:2] : addrA;  // Handles stores
+  assign inA = Branch ? mach_code[3:2] : str_addrA;   // Handles branching
+  
+  assign rd_addrB = mach_code[3:2];
+  assign AddrB = RegDst ? rd_addrB : mach_code[5:4]; // 4 bit or 2 it immediate
+  assign addrB = MemtoReg ? mach_code[5:4] : AddrB;  // Handles loads
+  assign str_addrB = MemWrite ? mach_code[5:4] : addrB;  // Handles loads
+  assign inB = Branch ? mach_code[5:4] : str_addrB;   // Handles branching
 
   assign wr_addr = mach_code[5:4];
 
@@ -100,7 +103,7 @@ module top_level(
               .datC_out(datLoop)
 				  ); 
 
-  assign muxA = ALUSrc? AddrA : datA;		// Adds option for immediate values or double register values
+  assign muxA = ALUSrc? addrA : datA;		// Adds option for immediate values or double register values
 
   alu alu1(
 		 .alu_cmd(ALUOp),
@@ -122,7 +125,7 @@ module top_level(
           .dat_out(regWriteData)				
 			 );		  
 
-assign regDataIn = ALUSrc ? rslt : regWriteData; 
+assign regDataIn = MemtoReg ? regWriteData : rslt; 
 
 // registered flags from ALU
 //  always_ff @(posedge clk) begin
@@ -137,3 +140,12 @@ assign regDataIn = ALUSrc ? rslt : regWriteData;
   assign done = prog_ctr == 128;
  
 endmodule
+
+/*
+Added more muxes that handle machine bits for loads/stores and branching.
+  - Fixed the mux logic for ADD, LS/RS, and BNE
+Added a 3 reg input and output for reg_file 
+  - this is solely used to get the 3rd register for branching
+Redid formatting diagram for reg_file and top_level
+ 
+*/
