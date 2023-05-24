@@ -7,29 +7,27 @@ module top_level(
 	
   wire[D-1:0] target, 			  // jump 
               prog_ctr;
-  wire[7:0]   datA,datB,		  // from RegFile
+  wire[7:0]   datA,datB,datLoop,		  // from RegFile
               muxB, 
-			  rslt,               // alu output
+              rslt,               // alu output
               immed,
-			  regWriteData,
-			regDataIn;
+              regWriteData,
+              regDataIn;
 				  
   //logic sc_in,   				  // shift/carry out from/to ALU
   // 		pariQ,              	  // registered parity flag from ALU
   //	zeroQ;                    // registered zero flag from ALU 
-  //wire  relj;                     // from control to PC; relative jump enable
-  
   // Control Outputs
-  wire    RegDst, 	       
-		  Branch, 			  
-		  MemWrite, 		  
-		  ALUSrc, 			  
-		  RegWrite, 		  
-		  MemtoReg,
-      Add;
+  wire  RegDst, 	       
+        Branch, 			  
+        MemWrite, 		  
+        ALUSrc, 			  
+        RegWrite, 		  
+        MemtoReg,
+        Add;
   
 		  //pari,
-          //zero,
+      //zero,
 		  //sc_clr,
 		  //sc_en,
  		  
@@ -40,8 +38,9 @@ module top_level(
 
   // fetch subassembly
   PC #(.D(D)) 					  // D sets program counter width
-     pc1 (.reset            ,
-         .clk               ,
+     pc1 (
+     .reset            ,
+     .clk               ,
 		 .absjump_en (Branch),
 		 .target	         , 
 		 .prog_ctr          
@@ -60,7 +59,7 @@ module top_level(
   // contains machine code
   instr_ROM ir1(
 				.prog_ctr,
-          .mach_code
+        .mach_code
 				);
 
 
@@ -88,14 +87,17 @@ module top_level(
 
   assign wr_addr = mach_code[5:4];
 
-  reg_file #(.pw(3)) rf1(.dat_in(regDataIn),	   // loads, most ops DOUBLE CHECK Entire Module~~~~~~~
+  reg_file #(.pw(3)) rf1(
+              .dat_in(regDataIn),	   // loads, most ops DOUBLE CHECK Entire Module~~~~~~~
               .clk         ,
               .wr_en   (RegWrite),
               .rd_addrA(inA),
               .rd_addrB(inB),
-              .wr_addr (wr_addr),      // in place operation
+              .rd_addrC(mach_code[1:0]),    // reg that holds loop index
+              .wr_addr (wr_addr),           // in place operation
               .datA_out(datA),
-              .datB_out(datB)
+              .datB_out(datB),
+              .datC_out(datLoop)
 				  ); 
 
   assign muxA = ALUSrc? AddrA : datA;		// Adds option for immediate values or double register values
@@ -104,6 +106,7 @@ module top_level(
 		 .alu_cmd(ALUOp),
      .inA    (muxA),
 		 .inB    (datB),
+     .inC    (datLoop),   // provides reg for LUT index 
 		 .rslt
 		 //.sc_i   (sc),   // output from sc register
 		 //.sc_o   (sc_o), // input to sc register
@@ -112,11 +115,11 @@ module top_level(
 
 		  
   dat_mem dm1(
-           .dat_in(datB)  ,  // from reg_file DOUBLE CHECK~~~~~~~~
+           .dat_in(datB)  ,  // from reg_file
            .clk           ,
 			     .wr_en  (MemWrite), // stores
 			     .addr   (rslt),
-          .dat_out(regWriteData)				// ADD CODE HERE  datB breaks it ~~~~~~~~~~~~
+          .dat_out(regWriteData)				
 			 );		  
 
 assign regDataIn = ALUSrc ? rslt : regWriteData; 
