@@ -1,6 +1,6 @@
 // sample top level design
 module top_level(
-  input        clk, reset, //req, 
+  input        clk, reset,
   output logic done);
   parameter D = 10,             // program counter width
     A = 3;             		  // ALU command bit width
@@ -121,6 +121,7 @@ module top_level(
            .dat_in(datB)  ,  // from reg_file
            .clk           ,
 			     .wr_en  (MemWrite), // stores
+           .rd_en (MemtoReg),
 			     .addr   (rslt),
           .dat_out(regWriteData)				
 			 );		  
@@ -137,7 +138,7 @@ assign regDataIn = MemtoReg ? regWriteData : rslt;
 //      sc_in <= sc_o;
 //  end
 
-  assign done = prog_ctr == 128;
+  assign done = prog_ctr == 381;
  
 endmodule
 
