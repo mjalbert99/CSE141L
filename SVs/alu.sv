@@ -16,8 +16,8 @@ always_comb begin
 	3'b011	: rslt = (inB != inA) ? inC : 8'b0;   		// BNE
 	3'b100	: rslt = inB << inA;  						// LS
 	3'b101	: rslt = inB >> inA;  						// RS
-	3'b110	: rslt = inB;  				    			// LW
-	3'b111	: rslt = inB;  								// STR
+	3'b110	: rslt = inA;  				    			// LW
+	3'b111	: rslt = inA;  								// STR
 	default	: rslt = 8'bx;  								// FALL THROUGH
 															// x's so we know it fell through
   endcase
