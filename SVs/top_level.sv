@@ -111,7 +111,7 @@ module top_level(
      .inA    (muxA),
 		 .inB    (datB),
      .inC    (datLoop),   // provides reg for LUT index 
-		 .rslt
+		 .rslt,
      .branch_pc
 		 //.sc_i   (sc),   // output from sc register
 		 //.sc_o   (sc_o), // input to sc register
