@@ -24,7 +24,8 @@ module top_level(
         ALUSrc, 			  
         RegWrite, 		  
         MemtoReg,
-        Add;
+        Add,
+        branch_pc;
   
 		  //pari,
       //zero,
@@ -41,7 +42,7 @@ module top_level(
      pc1 (
      .reset            ,
      .clk               ,
-		 .absjump_en (Branch),
+		 .absjump_en (branch_pc),
 		 .target	         , 
 		 .prog_ctr          
 		 );
@@ -111,6 +112,7 @@ module top_level(
 		 .inB    (datB),
      .inC    (datLoop),   // provides reg for LUT index 
 		 .rslt
+     .branch_pc
 		 //.sc_i   (sc),   // output from sc register
 		 //.sc_o   (sc_o), // input to sc register
 		 //.pari  
@@ -148,5 +150,7 @@ Added more muxes that handle machine bits for loads/stores and branching.
 Added a 3 reg input and output for reg_file 
   - this is solely used to get the 3rd register for branching
 Redid formatting diagram for reg_file and top_level
- 
+Added branch_pc wire as an output to the ALU and an input to 
+the PC. Acts as a bool to cause brnahcing to occur
+
 */
