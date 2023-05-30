@@ -11,7 +11,7 @@ module top_level(
    alu alu1(
      .alu_cmd(OP),
      .inA    (inA),
-     .inB    (inA),
+     .inB    (inB),
      .inC    (inC),
      .rslt   (rslt)    
 		 );
