@@ -1,7 +1,7 @@
 module reg_control(
   input RegDst, MemtoReg, MemWrite, Branch,
   input [8:0] mach_code,
-  output[7:0] inA, inB, immediate
+  output logic[7:0] inA, inB, immediate
 );
 
 always_comb begin
