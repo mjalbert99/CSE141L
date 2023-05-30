@@ -7,12 +7,15 @@ module top_level(
 	
   wire[D-1:0] target, 			  // jump 
               prog_ctr;
-  wire[7:0]   datA,datB,datLoop,		  // from RegFile
-              muxB, 
+  wire[7:0]   datA, datB, datLoop,		  // from RegFile
+              muxA, 
               rslt,               // alu output
               immed,
               regWriteData,
-              regDataIn;
+              regDataIn,
+              immediate,
+              inA,
+              inB;
 				  
   //logic sc_in,   				  // shift/carry out from/to ALU
   // 		pariQ,              	  // registered parity flag from ALU
@@ -76,20 +79,30 @@ module top_level(
 			.ALUOp     
 			);
 			
-			
-  assign rd_addrA = mach_code[1:0];
-  assign immediate = RegDst ? rd_addrA : mach_code[3:0]; // 4 bit or 2 it immediate
-  assign addrA = MemtoReg ? mach_code[3:2] : rd_addrA;  // Handles loads
-  assign str_addrA = MemWrite ? mach_code[3:2] : addrA;  // Handles stores
-  assign inA = Branch ? mach_code[3:2] : str_addrA;   // Handles branching
-  
-  assign rd_addrB = mach_code[3:2];
-  assign AddrB = RegDst ? rd_addrB : mach_code[5:4]; // 4 bit or 2 it immediate
-  assign addrB = MemtoReg ? mach_code[5:4] : AddrB;  // Handles loads
-  assign str_addrB = MemWrite ? mach_code[5:4] : addrB;  // Handles loads
-  assign inB = Branch ? mach_code[5:4] : str_addrB;   // Handles branching
+		reg_control rg1(
+      .RegDst     ,
+      .MemtoReg   ,
+      .MemWrite   ,
+      .Branch     ,
+      .mach_code  ,
+      .inA        ,
+      .inB        ,
+      .immediate  
+    );	
 
-  assign wr_addr = mach_code[5:4];
+  // assign rd_addrA = mach_code[1:0];
+  // assign immediate = RegDst ? rd_addrA : mach_code[3:0]; // 4 bit or 2 it immediate
+  // assign addrA = MemtoReg ? mach_code[3:2] : rd_addrA;  // Handles loads
+  // assign str_addrA = MemWrite ? mach_code[3:2] : addrA;  // Handles stores
+  // assign inA = Branch ? mach_code[3:2] : str_addrA;   // Handles branching
+  
+  // assign rd_addrB = mach_code[3:2];
+  // assign AddrB = RegDst ? rd_addrB : mach_code[5:4]; // 4 bit or 2 it immediate
+  // assign addrB = MemtoReg ? mach_code[5:4] : AddrB;  // Handles loads
+  // assign str_addrB = MemWrite ? mach_code[5:4] : addrB;  // Handles stores
+  // assign inB = Branch ? mach_code[5:4] : str_addrB;   // Handles branching
+
+  //assign wr_addr = mach_code[5:4];
 
   reg_file #(.pw(3)) rf1(
               .dat_in(regDataIn),	   // loads, most ops 
@@ -98,7 +111,7 @@ module top_level(
               .rd_addrA(inA),
               .rd_addrB(inB),
               .rd_addrC(mach_code[1:0]),    // reg that holds loop index
-              .wr_addr (wr_addr),           // in place operation
+              .wr_addr (mach_code[5:4]),           // in place operation
               .datA_out(datA),
               .datB_out(datB),
               .datC_out(datLoop)
@@ -152,5 +165,6 @@ Added a 3 reg input and output for reg_file
 Redid formatting diagram for reg_file and top_level
 Added branch_pc wire as an output to the ALU and an input to 
 the PC. Acts as a bool to cause brnahcing to occur
-
+Made a new module to control the bits intot he reg file and immediate vlaues for operations called 
+reg_control.
 */
