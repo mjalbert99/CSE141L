@@ -30,7 +30,7 @@ case(instr[8:6])    // override defaults with exceptions
 					RegWrite 	  = 'b0;
 			end
   3'b100:  begin				  				// ls
-					ALUOp 		  = 'b011; 
+					ALUOp 		  = 'b100; 
 					ALUSrc		  = 'b1;   
 					RegDst 		  = 'b0; 
 			end
