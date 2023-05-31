@@ -16,10 +16,7 @@ module top_level(
               immediate,
               inA,
               inB;
-				  
-  //logic sc_in,   				  // shift/carry out from/to ALU
-  // 		pariQ,              	  // registered parity flag from ALU
-  //	zeroQ;                    // registered zero flag from ALU 
+
   // Control Outputs
   wire  RegDst, 	       
         Branch, 			  
@@ -29,11 +26,6 @@ module top_level(
         MemtoReg,
         Add,
         branch_pc;
-  
-		  //pari,
-      //zero,
-		  //sc_clr,
-		  //sc_en,
  		  
   wire[A-1:0]	ALUOp;	
   
@@ -113,9 +105,6 @@ module top_level(
      .inC    (datLoop),   // provides reg for LUT index 
 		 .rslt,
      .branch_pc
-		 //.sc_i   (sc),   // output from sc register
-		 //.sc_o   (sc_o), // input to sc register
-		 //.pari  
 		 );
 
 		  
@@ -129,16 +118,6 @@ module top_level(
 			 );		  
 
 assign regDataIn = MemtoReg ? regWriteData : rslt; 
-
-// registered flags from ALU
-//  always_ff @(posedge clk) begin
-//    pariQ <= pari;
-//	zeroQ <= zero;
-//    if(sc_clr)
-//	  sc_in <= 'b0;
-//    else if(sc_en)
-//      sc_in <= sc_o;
-//  end
 
   assign done = prog_ctr == 381;
  
