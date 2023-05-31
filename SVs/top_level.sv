@@ -131,7 +131,7 @@ Added a 3 reg input and output for reg_file
 Redid formatting diagram for reg_file and top_level
 Added branch_pc wire as an output to the ALU and an input to 
 the PC. Acts as a bool to cause brnahcing to occur
-Made a new module to control the bits intot he reg file and immediate vlaues for operations called 
+Made a new module to control the bits into the reg file and immediate values for operations called 
 reg_control.
 Updated units to have more than one bit with (caused errors in moddel sim)
 */
