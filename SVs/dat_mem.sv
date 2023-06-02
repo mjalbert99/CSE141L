@@ -8,6 +8,8 @@ module dat_mem (
   output logic[7:0] dat_out);
 
   logic[7:0] core[256];       // 2-dim array  8 wide  256 deep
+  initial							    // load initial memory values 
+    $readmemb("memory.txt",core);
 
 // reads are combinational; no enable or clock required
 

@@ -13,7 +13,9 @@ module reg_file #(parameter pw=2)(
 					datC_out);
 
   logic[7:0] 		core[2**pw];    		// 2-dim array  8 wide  16 deep
-
+  initial							    // load initial register values 
+    $readmemb("registers.txt",core);
+    
 // reads are combinational
   assign datA_out = core[rd_addrA];
   assign datB_out = core[rd_addrB];
