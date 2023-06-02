@@ -83,12 +83,12 @@ module top_level(
     );	
 
 
-  reg_file #(.pw(3)) rf1(
+  reg_file #(.pw(2)) rf1(
               .dat_in(regDataIn),	   // loads, most ops 
               .clk         ,
               .wr_en   (RegWrite),
-              .rd_addrA(inA),
-              .rd_addrB(inB),
+              .rd_addrA(inA[1:0]),
+              .rd_addrB(inB[1:0]),
               .rd_addrC(mach_code[1:0]),    // reg that holds loop index
               .wr_addr (mach_code[5:4]),           // in place operation
               .datA_out(datA),
