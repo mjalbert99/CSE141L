@@ -15,7 +15,9 @@ module top_level(
               regDataIn,
               immediate,
               inA,
-              inB;
+              inB,
+	      inC,
+	      write_adr;;
 
   // Control Outputs
   wire  RegDst, 	       
@@ -79,6 +81,8 @@ module top_level(
       .mach_code  ,
       .inA        ,
       .inB        ,
+      .inC	,
+      .write_adr  ,
       .immediate  
     );	
 
@@ -89,8 +93,8 @@ module top_level(
               .wr_en   (RegWrite),
               .rd_addrA(inA[1:0]),
               .rd_addrB(inB[1:0]),
-              .rd_addrC(mach_code[1:0]),    // reg that holds loop index
-              .wr_addr (mach_code[5:4]),           // in place operation
+	      .rd_addrC(inC[1:0]),    // reg that holds loop index
+	     .wr_addr (write_adr[5:4]),           // in place operation
               .datA_out(datA),
               .datB_out(datB),
               .datC_out(datLoop)
