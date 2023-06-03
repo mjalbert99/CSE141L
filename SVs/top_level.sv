@@ -94,7 +94,7 @@ module top_level(
               .rd_addrA(inA[1:0]),
               .rd_addrB(inB[1:0]),
 	      .rd_addrC(inC[1:0]),    // reg that holds loop index
-	     .wr_addr (write_adr[5:4]),           // in place operation
+	  .wr_addr (write_adr[1:0]),           // in place operation
               .datA_out(datA),
               .datB_out(datB),
               .datC_out(datLoop)
