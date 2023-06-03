@@ -133,4 +133,4 @@ def convert(inFile, outFile1, outFile2):
 	assembly_file.close()
 	machine_file.close()
 
-convert("Assembler\Program1.txt", "Assembler\out.txt", "Assembler\out2.txt")
+convert("Assembler/program1.txt", "Assembler/out.txt", "Assembler/out2.txt")
