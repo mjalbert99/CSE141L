@@ -1,13 +1,15 @@
 module reg_control(
   input RegDst, MemtoReg, MemWrite, Branch,
   input [8:0] mach_code,
-  output logic[7:0] inA, inB, immediate
+  output logic[7:0] inA, inB, inC, write_adr, immediate
 );
 
 always_comb begin
 	 inA = 0;
 	 inB = 0;
 	 immediate = 0;
+     inC = mach_code[1:0];
+     write_adr = mach_code[5:4];
     if(!RegDst) begin
         inA = mach_code[1:0];       // Doesnt matter the value
         inB = mach_code[5:4];
