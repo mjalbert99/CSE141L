@@ -17,7 +17,7 @@ module top_level(
               inA,
               inB,
 	      inC,
-	      write_adr;;
+	      write_adr;
 
   // Control Outputs
   wire  RegDst, 	       
