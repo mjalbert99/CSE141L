@@ -1,0 +1,361 @@
+// Works assuming mem[65] = p8, mem[66] = p4, mem[67] = p2, mem[68] = p1, mem[69] = p0
+// Counter stored at mem[64]
+// r3 always is used for the index
+// r2 holds message
+// r1 holds xor values
+// r0 magic
+ADD r0, r0, #1
+LS r0, #6                                   // r0 = 64
+STR r3, r0                                  // mem[64] = 0
+Loop:
+RS r0, #8                                   // clear r0
+RS r0, #8                                   // clear r0     error with bne where it skips the command to goes to ( either go back one or do this lol)
+ADD r0, r0, #1                              
+LS r0, #6                                   // r0 = 64
+LW r3, r0                                   // load ctr
+ADD r3, r3, #1                              // increment index
+LW r2, r3                                   // load b11:b9
+RS r0, #8                                   // r0 = 0
+ADD r0, r0, #1
+LS r0, #2                                   // r0 = 4
+AND r1, r2, r0                              // get b11
+RS r1, #2                                   // prime b11 for xor
+RS r0, #8                                   // clear r0
+ADD r0, r0, #2                              // r0 = 2
+AND r0, r2, r0                              // get b10
+RS r0, #1                                   // prime b10 for xor
+XOR r1, r1, r0                              // b11 ^ b10
+RS r0, #8                                   // clear r0
+ADD r0, r0, #1                              // r0 = 1
+AND r0, r2, r0                              // gets b9
+XOR r1, r1, r0                              // b11 ^ b10 ^ b9
+RS r0, #8                                   // clear r0
+ADD r0, r0, #1
+LS r0, #6                                   // r0 = 64
+LW r3, r0                                   // r3 = index(ctr)
+LW r2, r3                                   // load b8:b1
+LS r0, #1                                   // r0 = 128
+AND r0, r2, r0                              // get b8
+RS r0, #7                                   // prime b8 for xor
+XOR r1, r1, r0                              // b11 ^ b10 ^ b9 ^ b8
+RS r0, #8                                   // clear r0
+ADD r0, r0, #1
+LS r0, #6                                   // r0 = 64
+AND r0, r2, r0                              // get b7
+RS r0, #6                                   // prime b7
+XOR r1, r1, r0                              // b11 ^ b10 ^ b9 ^ b8 ^ b7
+RS r0, #8                                   // r0 clear
+ADD r0, r0, #1
+LS r0, #5                                   // r0 = 32
+AND r0, r2, r0                              // get b6
+RS r0, #5                                   // prime for xor
+XOR r1, r1, r0                              // b11 ^ b10 ^ b9 ^ b8 ^ b7 ^ b6
+RS r0, #8                                   // r0 clear
+ADD r0, r0, #1
+LS r0, #4                                   // r0 = 16
+AND r0, r2, r0                              // get b5
+RS r0, #4                                   // prime for xor
+XOR r1, r1, r0                              // b11 ^ b10 ^ b9 ^ b8 ^ b7 ^ b6 ^ b5
+RS r0, #8                                   // clear r0
+ADD r0, r0, #1
+LS r0, #6
+ADD r0, r0, #1                              // r0 = 65
+STR r1, r0                                  // mem[65] = p8(b11 ^ b10 ^ b9 ^ b8 ^ b7 ^ b6 ^ b5)
+RS r0, #8                                   // clear r0
+ADD r0, r0, #1                              
+LS r0, #6                                   // r0 = 64
+LW r3, r0                                   // load ctr
+ADD r3, r3, #1                              // increment index
+LW r2, r3                                   // load b11:b9
+RS r0, #8                                   // r0 = 0
+ADD r0, r0, #1
+LS r0, #2                                   // r0 = 4
+AND r1, r2, r0                              // get b11
+RS r1, #2                                   // prime b11 for xor
+RS r0, #8                                   // clear r0
+ADD r0, r0, #2                              // r0 = 2
+AND r0, r2, r0                              // get b10
+RS r0, #1                                   // prime b10 for xor
+XOR r1, r1, r0                              // b11 ^ b10
+RS r0, #8                                   // clear r0
+ADD r0, r0, #1                              // r0 = 1
+AND r0, r2, r0                              // gets b9
+XOR r1, r1, r0                              // b11 ^ b10 ^ b9
+RS r0, #8                                   // clear r0
+ADD r0, r0, #1
+LS r0, #6                                   // r0 = 64
+LW r3, r0                                   // r3 = index(ctr)
+LW r2, r3                                   // load b8:b1
+LS r0, #1                                   // r0 = 128
+AND r0, r2, r0                              // get b8
+RS r0, #7                                   // prime b8 for xor
+XOR r1, r1, r0                              // b11 ^ b10 ^ b9 ^ b8
+RS r0, #8                                   // clear r0
+ADD r0, r0, #1
+LS r0, #3                                   // r0 = 8
+AND r0, r2, r0                              // get b4
+RS r0, #3                                   // prime b4 for xor
+XOR r1, r1, r0                              // b11 ^ b10 ^ b9 ^ b8 ^ b4
+RS r0, #8                                   // clear r0
+ADD r0, r0, #1
+LS r0, #2                                   // r0 = 8
+AND r0, r2, r0                              // get b3
+RS r0, #2                                   // prime b3 for xor
+XOR r1, r1, r0                              // b11 ^ b10 ^ b9 ^ b8 ^ b4 ^ b3
+RS r0, #8                                   // clear r0
+ADD r0, r0, #1
+LS r0, #1                                   // r0 = 4
+AND r0, r2, r0                              // get b2
+RS r0, #1                                   // prime b2 for xor
+XOR r1, r1, r0                              // b11 ^ b10 ^ b9 ^ b8 ^ b4 ^b3 ^ b2
+RS r0, #8                                   // clear r0
+ADD r0, r0, #1
+LS r0, #6
+ADD r0, r0, #2                              // r0 = 66
+STR r1, r0                                  // mem[66] = p4(b11 ^ b10 ^ b9 ^ b8 ^ b4 ^b3 ^ b2)
+RS r0, #8                                   // clear r0
+ADD r0, r0, #1                              
+LS r0, #6                                   // r0 = 64
+LW r3, r0                                   // load ctr
+ADD r3, r3, #1                              // increment index
+LW r2, r3                                   // load b11:b9
+RS r0, #8                                   // r0 = 0
+ADD r0, r0, #1
+LS r0, #2                                   // r0 = 4
+AND r1, r2, r0                              // get b11
+RS r1, #2                                   // prime b11 for xor
+RS r0, #8                                   // clear r0
+ADD r0, r0, #2                              // r0 = 2
+AND r0, r2, r0                              // get b10
+RS r0, #1                                   // prime b10 for xor
+XOR r1, r1, r0                              // r1 = b11 ^ b10
+RS r0, #8                                   // clear r0
+ADD r0, r0, #1
+LS r0, #6                                   // r0 = 64
+LW r3, r0                                   // load index
+LW r2, r3                                   // load b8:b1
+RS r0, #8                                   // clear r0
+ADD r0, r0, #1
+LS r0, #6                                   // r0 = 64
+AND r0, r2, r0                              // get b7
+RS r0, #6                                   // prime for xor
+XOR r1, r1, r0                              // r1 = b11 ^ b10 ^ b7
+RS r0, #8                                   // clear r0
+ADD r0, r0, #1
+LS r0, #5                                   // r0 = 32
+AND r0, r2, r0                              // get b6
+RS r0, #5                                   // prime for xor
+XOR r1, r1, r0                              // r1 = b11 ^ b10 ^ b7 ^ b6
+RS r0, #8                                   // clear r0
+ADD r0, r0, #1
+LS r0, #3                                   // r0 = 8
+AND r0, r2, r0                              // get b4
+RS r0, #3                                   // prime for xor
+XOR r1, r1, r0                              // r1 = b11 ^ b10 ^ b7 ^ b6 ^ b4
+RS r0, #8                                   // clear r0
+ADD r0, r0, #1
+LS r0, #2                                   // r0 = 4
+AND r0, r2, r0                              // get b3
+RS r0, #2                                   // prime for xor
+XOR r1, r1, r0                              // r1 = b11 ^ b10 ^ b7 ^ b6 ^ b4 ^ b3
+RS r0, #8                                   // clear r0
+ADD r0, r0, #1                              // r0 = 1
+AND r0, r2, r0                              // get b1
+XOR r1, r1, r0                              // r1 = b11 ^ b10 ^ b7 ^ b6 ^ b4 ^ b3 ^ b1
+RS r0, #8                                   // clear r0
+ADD r0, r0, #1
+LS r0, #6
+ADD r0, r0, #3                              // r0 = r8
+STR r1, r0                                  // mem[67] = p2(b11 ^ b10 ^ b7 ^ b6 ^ b4 ^ b3 ^ b1)
+RS r0, #8                               // clear r0
+ADD r0, r0, #1
+LS r0, #6                               // r0 =64
+LW r3, r0                               // load index
+ADD r3, r3, #1                          // increment index
+LW r2, r3                               // loads b11:b9
+RS r0, #8                               // clear r0
+ADD r0, r0, #1
+LS r0, #2                               // r0 = 4
+AND r1, r2, r0                          // get b11
+RS r1, #2                           // prime for xor
+RS r0, #8                               // clear r0
+ADD r0, r0, #1                          // r0 = 1
+AND r0, r2, r0                          // get b9
+XOR r1, r1, r0                          // r1 = b11 ^ b9
+RS r0, #8                               // clear r0
+ADD r0, r0, #1
+LS r0, #6                               // r0 = 64
+LW r3, r0                               // load index
+LW r2, r3                               // load b8:b1
+RS r0, #8                               // clear r0
+ADD r0, r0, #1
+LS r0, #6                               // r0 = 64
+AND r0, r2, r0                          // get b7
+RS r0, #6                               // prime for xor
+XOR r1, r1, r0                          // r1 = b11 ^ b9 ^ b7
+RS r0, #8                               // clear r0
+ADD r0, r0, #1
+LS r0, #4                               // r0 = 16
+AND r0, r2, r0                          // get b5
+RS r0, #4                               // prime for xor
+XOR r1, r1, r0                          // r1 = b11 ^ b9 ^ b7 ^ b5
+RS r0, #8                               // clear r0
+ADD r0, r0, #1
+LS r0, #3                               // r0 = 8
+AND r0, r2, r0                          // get b4
+RS r0, #3                               // prime for xor
+XOR r1, r1, r0                          // r1 = b11 ^ b9 ^ b7 ^ b5 ^ b4
+RS r0, #8                               // clear r0
+ADD r0, r0, #2                          // r0 = 2
+AND r0, r2, r0                          // get p2
+RS r0, #1                               // prime for xor
+XOR r1, r1, r0                          // r1 = b11 ^ b9 ^ b7 ^ b5 ^ b4 ^ r2
+RS r0, #8                               // clear r0
+ADD r0, r0, #1                          // r0 = 1
+AND r0, r2, r0                          // get b1
+XOR r1, r1, r0                          // r1 = b11 ^ b9 ^ b7 ^ b5 ^ b4 ^ r2 ^ b1
+RS r0, #8                               // clear r0
+ADD r0, r0, #1
+LS r0, #6
+ADD r0, r0, #3
+ADD r0, r0, #1                          // r0 = 68
+STR r1, r0                              // mem[68] = p1(b11 ^ b9 ^ b7 ^ b5 ^ b4 ^ r2 ^ b1)
+RS r0, #8                                   // clear r0
+ADD r0, r0, #1                              
+LS r0, #6
+ADD r0, r0, #1                              // r0 = 65
+LW r1, r0                                   // r1 = ^(b11:b5) ie p8
+RS r0, #8                                   // clear r0
+ADD r0, r0, #1
+LS r0, #6                                   // r0 = 64
+LW r3, r0                                   // r3 = index
+LW r2, r3                                   // load b8:b1
+RS r0, #8                                   // clear r0
+ADD r0, r0, #1
+LS r0, #3                                   // r0 = 8
+AND r0, r2, r0                              // get b4
+RS r0, #3                                   // prime for xor
+XOR r1, r1, r0                              // r1 = ^(b11:b5) ^ b4
+RS r0, #8                                   // clear r0
+ADD r0, r0, #1
+LS r0, #2                                   // r0 = 4
+AND r0, r2, r0                              // get b3
+RS r0, #2                                   // prime for xor
+XOR r1, r1, r0                              // r1 = ^(b11:b5) ^ b4 ^ b3
+RS r0, #8                                   // clear r0
+ADD r0, r0, #1
+LS r0, #1                                   // r0 = 2
+AND r0, r2, r0                              // get b2
+RS r0, #1                                   // prime for xor
+XOR r1, r1, r0                              // r1 = ^(b11:b5) ^ b4 ^ b3 ^ b2
+RS r0, #8                                   // clear r0
+ADD r0, r0, #1                              // r0 = 1
+AND r0, r2, r0                              // get b1
+XOR r1, r1, r0                              // r1 = ^(b11:b5) ^ b4 ^ b3 ^ b2 ^ b1
+RS r0, #8                                   // clear r0
+ADD r0, r0, #1
+LS r0, #6
+ADD r0, r0, #1                              // r0 = 65
+LW r0, r0                                   // r0 = p8
+XOR r1, r1, r0                              // r1 = ^(b11:b5) ^ b4 ^ b3 ^ b2 ^ b1 ^ p8
+RS r0, #8                                   // clear r0
+ADD r0, r0, #1
+LS r0, #6
+ADD r0, r0, #2                              // r0 = 66
+LW r0, r0                                   // r0 = p4
+XOR r1, r1, r0                              // r1 = ^(b11:b5) ^ b4 ^ b3 ^ b2 ^ b1 ^ p8 ^ p4
+RS r0, #8                                   // clear r0
+ADD r0, r0, #1
+LS r0, #6
+ADD r0, r0, #3                              // r0 = 67
+LW r0, r0                                   // r0 = p2
+XOR r1, r1, r0                              // r1 = ^(b11:b5) ^ b4 ^ b3 ^ b2 ^ b1 ^ p8 ^ p4 ^ p2
+RS r0, #8                                   // clear r0
+ADD r0, r0, #1
+LS r0, #6
+ADD r0, r0, #3                              
+ADD r0, r0, #1                              // r0 = 68
+LW r0, r0                                   // r0 = p1
+XOR r1, r1, r0                              // r1 = ^(b11:b5) ^ b4 ^ b3 ^ b2 ^ b1 ^ p8 ^ p4 ^ p2 ^ p1
+RS r0, #8                                   // clear r0
+ADD r0, r0, #1
+LS r0, #6
+ADD r0, r0, #3
+ADD r0, r0, #2                              // r0 = 69
+STR r1, r0                                  // mem[69] = p0(^(b11:b5) ^ b4 ^ b3 ^ b2 ^ b1 ^ p8 ^ p4 ^ p2 ^ p1)
+RS r0, #8                                   // clear r0
+ADD r0, r0, #1
+LS r0, #6                                   // r0 = 64
+LW r3, r0                                   // load index(ctr)
+LW r1, r3                                   // load b8:b1
+ADD r3, r3, #1                              // increment index
+LW r2, r3                                   // load b11:b9
+LS r2, #4                                   // 0 b11 b10 b9 0 0 0 0
+RS r1, #4                                   // 0  0   0   0  b8 b7 b6 b5
+XOR r2, r2, r1                              // 0 b11 b10 b9 b8 b7 b6 b5
+LS r2, #1                                   // b11 b10 b9 b8 b7 b6 b5 0
+ADD r0, r0, #1                              // r0 = 65
+LW r1, r0                                   // load p8
+XOR r2, r2, r1                              // b11 b10 b9 b8 b7 b6 b5 p8
+ADD r3, r3, #3
+ADD r3, r3, #3
+ADD r3, r3, #3
+ADD r3, r3, #3
+ADD r3, r3, #3
+ADD r3, r3, #3
+ADD r3, r3, #3
+ADD r3, r3, #3
+ADD r3, r3, #3
+ADD r3, r3, #3                          // r3 += 30   r3 = ctr+31
+STR r2, r3                              // mem[ctr+31] = r2
+RS r0, #8                               // clear r0
+ADD r0, r0, #1
+LS r0, #6                               // r0 = 64
+LW r3, r0                               // load index
+LW r2, r3                               // load b8:b1
+RS r2, #1                               // r2 = 0 b8:b2
+LS r2, #1                               // r2 = b8:b2 0
+ADD r0, r0, #2                          // r0 = 66
+LW r1, r0                               // r1 = p4
+XOR r2, r2, r1                          // b8:b2 p4
+LS r2, #1                               // b7:b2 p4 0
+LW r1, r3                               // r1 = b8: b1
+LS r1, #7                               // r1 = b1 0 0 0 0 0 0 0
+RS r1, #7                               // r1 = 0 0 0 0 0 0 0 b1
+XOR r2, r2, r1                          // r2 = b7:b2 p4 b1
+LS r2, #1                               // r2 = b6:b2 p4 b1 0
+ADD r0, r0, #1                          // r0 = 67
+LW r1, r0                               // r1 = p2
+XOR r2, r2, r1                          // r2 = b6:b2 p4 b1 p2
+LS r2, #1                               // r2 =  b5:b2 p4 b1 p2 0
+ADD r0, r0, #1                          // r0 = 68
+LW r1, r0                               // r1 = p1
+XOR r2, r2, r1                          // r2 = b5:b2 p4 b1 p2 p1
+LS r2, #1                               // r2 = b4:b2 p4 b1 p2 p1 0
+ADD r0, r0, #1                          // r0 = 69
+LW r1, r0                               // r1 = p0
+XOR r2, r2, r1                          // r2 = b4:b2 p4 b1 p2 p1 p0
+ADD r3, r3, #3
+ADD r3, r3, #3
+ADD r3, r3, #3
+ADD r3, r3, #3
+ADD r3, r3, #3
+ADD r3, r3, #3
+ADD r3, r3, #3
+ADD r3, r3, #3
+ADD r3, r3, #3
+ADD r3, r3, #3                         // r3 = 30
+STR r2, r3                             // mem[ctr+30] = b4:b2 p4 b1 p2 p1 p0
+RS r0, #8                               // clear r0
+ADD r0, r0, #1 
+LS r0, #6                               // r0 = 64
+LW r3, r0                               // load ctr
+ADD r3, r3, #2                          // increment Counter
+STR r3, r0                              // mem[64] = ctr(updated) ~~~~~~~~~~~~~~~~~
+RS r0, #8                               // clear r0
+ADD r0, r0, #3                          // r0 = 3
+LS r0, #2                               // r0 = 12
+ADD r0, r0, #3                           // r0 = 15
+LS r0, #1                               // r0 = 30
+RS r2, #8                              // r2 = 0 index for lut
+BNE r3, r0, r2                         // if( r3(ctr) != 30) branch to index 1
