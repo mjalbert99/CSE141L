@@ -125,8 +125,6 @@ module top_level(
 
 assign done = prog_ctr == 500;
 
-//always @*
-//    $display("Done is: %D", done);  
  
 endmodule
 

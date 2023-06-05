@@ -10,8 +10,5 @@ module instr_ROM #(parameter D=10)(
     $readmemb("outP2.txt",core);
 
   always_comb  mach_code = core[prog_ctr];
-    
-  always @*
-    $display("Currently running instruction is: %B \n", mach_code);  
 
 endmodule

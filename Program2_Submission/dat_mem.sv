@@ -17,11 +17,8 @@ module dat_mem (
 
 // writes are sequential (clocked) -- occur on stores or pushes 
   always_ff @(posedge clk)
-    if(wr_en) begin			  // wr_en usually = 0; = 1 		
-		$display("Writing %D to memory %D\n", dat_in, addr); 
+    if(wr_en) 		  // wr_en usually = 0; = 1 		
       core[addr] <= dat_in; 
-	end 
+ 
 	
-	always @*
-    $display("Value read from memory is %D", dat_out); 
 endmodule
