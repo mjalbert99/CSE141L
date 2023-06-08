@@ -56,3 +56,11 @@ This mux controls what data will be fed into the register file for writing this 
 The LUT is a case statment block that holds specific program counter values to use for the `target` for the program counter. This has the inputs `addr` for the specific index and is the `rslt` of the ALU and `branch` which is the contorl bit `Branch` and tells it when to load a target value. It has the output `target` which holds the program counter value to branch to and is fed into the program counter for the `target` input.
 
 ## Logic Behind Assembly
+
+### Program 1
+Program 1 works by us taking two consecutive bytes of memory calculating parity bits `p8, p4, p2, p1, and p0` then using those to form a new message and store it in memory. The parity bits are found by taking the existing bits from the bytes and performing XOR operations to extract a single bit. This is done by using the values 128, 64, 32, 16, 8, 4, 2, and 1 XOR'd with the byte to get a single bit. We then shift over that bit to the 0th place of the byte then XOR that with another isolated bit. Repeating this to form each parity bit. We form each parity bit in a single loop itertion and store each bit in the corresponding memory spot `p8:65, p4:66, p2:67, p1:68, and p0:69`. We then use this bits to form the new bytes. This is done by right and left shifting the orignal bits and XOR'ing with the parity bits to create the new bytes which will form a new message. To repeat this for 15 messages we store a counter variable that will also act as an index into what bytes to use. This counter will be stored in memory 64. To store the new bytes we take the current counter index and store in the current index + 30 and the current index +31. The current counter index also in incremented by two for each new message as each message has 2 bytes. We then see if the counter index is 30 and if it is not then we branch back to the begining to find the next message. Repeating until the counter is at 30 where we do not branch and set the done bit to high.
+
+### Program 2
+
+
+### Program 3
