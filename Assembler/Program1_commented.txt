@@ -357,5 +357,7 @@ ADD r0, r0, #3                          // r0 = 3
 LS r0, #2                               // r0 = 12
 ADD r0, r0, #3                           // r0 = 15
 LS r0, #1                               // r0 = 30
-RS r2, #8                              // r2 = 0 index for lut
+RS r2, #8                              
+ADD r2, r2, #1
+LS r2, #4                              // r2 = 0 for LUT
 BNE r3, r0, r2                         // if( r3(ctr) != 30) branch to index 1

@@ -3,7 +3,7 @@
 module test_bench();
 
 bit   clk   ,                 // clock source -- drives DUT input of same name
-	  reaet   ;	             // req -- start next program -- drives DUT input
+	  req   ;	             // req -- start next program -- drives DUT input
 wire  done;		    	         // ack -- from DUT -- done w/ program
 
 // program 3-specific variables
@@ -17,17 +17,17 @@ logic[  7:0] mat_str[32];      // message string parsed into bytes
 
 // your device goes here
 // explicitly list ports if your names differ from test bench's
-top_level DUT(.clk, start(req),.ack(done));	               // replace "proc" with the name of your top level module
+top_level DUT(.clk (clk), .reset (req),.done (done));	               // replace "proc" with the name of your top level module
 
 initial begin
 // program 3
 // pattern we are looking for; experiment w/ various values
-  pat = {5'b0000,3'b000};//{5'b10101,3'b000};//{$random,3'b000};
+  pat = {3'b000, 5'b00111}; //{3'b000, 5'b10101}; //{5'b10101,3'b000}; //{5'b0000,3'b000};//{$random,3'b000};
   str2 = 0;
   DUT.dm1.core[32] = pat;
   for(int i=0; i<32; i++) begin
 // search field; experiment w/ various vales
-    mat_str[i] = 8'b00000000;//8'b01010101;// $random;
+    mat_str[i] = 8'b11000001; //8'b00000000;//8'b01010101; //8'b11111111; // $random;
 	DUT.dm1.core[i] = mat_str[i];   
 	str2 = (str2<<8)+mat_str[i];
   end
@@ -47,9 +47,9 @@ initial begin
     if(pat==str2[255:251]) cts++;
 	str2 = str2<<1;
   end        	    
-  #10ns reset   = 1'b1;      // pulse request to DUT
-  #10ns reset   = 1'b0;
-  wait(ack);               // wait for ack from DUT
+  #10ns req   = 1'b1;      // pulse request to DUT
+  #10ns req   = 1'b0;
+  wait(done);               // wait for ack from DUT
   $display();
   $display("start program 3");
   $display();

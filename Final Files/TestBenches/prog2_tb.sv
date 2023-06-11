@@ -7,7 +7,7 @@
 //    condition: flip2[5:4] == 2'b00 && flip2[3:0] != flip;
 // 25 * (1/256)% no errors (flip2[5:4] == 2'b00 && flip2[3:0] == flip)
 //    
-module prog2_tb();
+module test_bench();
 
 bit   clk   ,                    // clock source -- drives DUT input of same name
 	  reset   ;	                 // req -- start program -- drives DUT input
