@@ -22,9 +22,10 @@ def convert(inFile, outFile1, outFile2):
 		#check if it is a label or not
 		if instr[0] not in opcodes:
 			lut[instr[0].replace(':', '')] = labelsNum
+			lineNum -= 1 
 			lut_file.write(str(lineNum) + '\n')
 			labelsNum += 1
-	
+
 	#reads through file to convert instructions to machine code
 	for line in assembly:
 		output = ""
@@ -133,4 +134,4 @@ def convert(inFile, outFile1, outFile2):
 	assembly_file.close()
 	machine_file.close()
 
-convert("Assembler/program1.txt", "Assembler/out.txt", "Assembler/out2.txt")
+convert("prog3.txt", "out3.txt", "lut3.txt")

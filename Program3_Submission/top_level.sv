@@ -93,7 +93,7 @@ module top_level(
               .wr_en   (RegWrite),
               .rd_addrA(inA[1:0]),
               .rd_addrB(inB[1:0]),
-              .rd_addrC(inC),    // reg that holds loop index
+              .rd_addrC(inC[1:0]),    // reg that holds loop index
               .wr_addr (write_adr[1:0]),           // in place operation
               .datA_out(datA),
               .datB_out(datB),
@@ -123,7 +123,10 @@ module top_level(
 
    assign regDataIn = MemtoReg ? regWriteData : rslt;
 
-assign done = prog_ctr == 354;
+assign done = prog_ctr == 344;
+
+//always @*
+//    $display("Done is: %D", done);  
  
 endmodule
 

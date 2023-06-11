@@ -1,9 +1,9 @@
 // CSE141L  
 // test bench for program 3
-module prog3_tb();
+module test_bench();
 
 bit   clk   ,                 // clock source -- drives DUT input of same name
-	  req   ;	             // req -- start next program -- drives DUT input
+	  reaet   ;	             // req -- start next program -- drives DUT input
 wire  done;		    	         // ack -- from DUT -- done w/ program
 
 // program 3-specific variables
@@ -47,8 +47,8 @@ initial begin
     if(pat==str2[255:251]) cts++;
 	str2 = str2<<1;
   end        	    
-  #10ns req   = 1'b1;      // pulse request to DUT
-  #10ns req   = 1'b0;
+  #10ns reset   = 1'b1;      // pulse request to DUT
+  #10ns reset   = 1'b0;
   wait(ack);               // wait for ack from DUT
   $display();
   $display("start program 3");

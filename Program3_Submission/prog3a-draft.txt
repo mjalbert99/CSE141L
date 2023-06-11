@@ -1,0 +1,469 @@
+// assembly for part 3a 
+// Pre-populated memory should look like this 
+// assume all registers default with value of 0 
+// Memory: 
+//      Mem[128] = i 
+//      Mem[129] = j 
+//      Mem[130] = counter for part a 
+
+
+// r3 = 0, is our temporary result counter, to be stored at mem 130
+
+// get pattern (assume relevant bits are 5 MSB bits)
+// add r2, r2, #1              // r2 = 1
+// ls r2, #5                   // r2 = 32
+// lw r1, r2                   // r1 = pattern 
+
+// r4 = 0, is our i counter, stored at mem 128 
+
+// SUMMARY: r1 = 0, r2 = 0, r3 = 0 (res counter), r4 = 0 (i counter)
+// LUT INDEX 0 
+OUTER_LOOP: 
+lw r2, r4                   // r2 = mem[i]
+
+ls r4, #7                   // reset so r4 = 0
+ls r4, #7                   // loop counter "j"
+
+// LUT INDEX 1
+// SUMMARY: r3 = 0 always
+INNER_LOOP: 
+ls r1, #7                   // reset so r1 = 0 
+ls r1, #7 
+add r1, r1, #2              // r1 = 2
+ls r3, #7                   // reset so r3 = 0 
+ls r3, #7 
+bne r3, r4, r1              // if r4 "j" != 0, go to SHIFT 
+add r1, r1, #1              // r1 = 3 
+bne r1, r4, r1              // if this line is reached, j = 0. So go to LOOP 3 SKIP 
+
+// ls r1, #7                   // reset so r1 = 0
+// ls r1, #7           
+// add r1, r1, #2              // r1 = 2
+// LUT INDEX 2
+SHIFT: 
+rs r2, #1                   // rs current byte by 1 
+
+// LUT INDEX 3
+SKIP: 
+ls r1, #7                   // reset so r1 = 0
+ls r1, #7 
+add r1, r1, #1              // r1 = 1
+ls r1, #7                   // r1 = 128
+add r1, r1, #1              // r1 = 129
+add r4, r4, #1              // increment j 
+sw r4, r1                   // mem[129] = new j  
+
+ls r4, #7                   // r4 = 0 
+ls r4, #7 
+add r4, r4, #1              // r4 = 1
+ls r4, #4                   // r4 = 16
+add r4, r4, #3  
+add r4, r4, #3  
+add r4, r4, #3  
+add r4, r4, #3  
+add r4, r4, #3              // r4 = 31
+and r3, r2, r4              // get bottom 5 bits of data 
+add r4, r4, #1              // r4 = 32
+lw r1, r4                   // r1 = mem[32] = pattern 
+// NOTE: may need to shift pattern here, to compare top 5 bits 
+XOR r4, r1, r3              // check if pattern == bottom 5 bits of data
+ls r1, #7                   // reset so r1 = 0
+ls r1, #7       
+add r1, r1, #3              // r1 = 3
+add r1, r1, #1              // r1 = 4
+ls r3, #7                   // r3 = 0
+ls r3, #7 
+bne r4, r3, r1               // if r4 != 0,  go to LOOP 4 NO MATCH
+
+ls r4, #7                   // reset so r4 = 0 
+ls r4, #7 
+add r4, r4, #1              // r4 = 1
+ls r4, #7                   // r4 = 128 
+add r4, r4, #2              // r4 = 130 
+lw r3, r4                   // r3 = mem[130] (result counter)
+add r3, r3, #1              // increment counter 
+sw r3, r4                   // mem[130] = r3 (store updated counter)
+
+
+// SUMMARY: r1 = 4
+// LOOP 4
+NO_MATCH: 
+ls r4, #7                   // r4 = 0 
+ls r4, #7 
+add r4, r4, #1              // r4 = 1
+ls r4, #7                   // r4 = 128 
+add r4, r4, #1              // r4 = 129 
+lw r4, r4                   // r4 = j 
+ls r3, #7                   // r3 = 0 
+ls r3, #7 
+add r3, r3, #1              // r3 = 1
+bne r4, r1, r3              // if j != 4, go to LOOP 1 INNER LOOP 
+
+ls r3, #7                   // reset so r3 = 0 
+ls r3, #7 
+add r3, r3, #1              // r3 = 1
+ls r3, #7                   // r3 = 128 
+lw r4, r3                   // r4 = i 
+add r4, r4, #1              // increment i 
+sw r4, r3                   // mem[128] = new i 
+
+ls r2, #7                   // r2 = 0 
+ls r2, #7 
+add r2, r2, #1              // r2 = 1
+ls r2, #5                   // r2 = 32
+
+ls r3, #7                   // r3 = 0 
+ls r3, #7 
+
+bne r4, r2, r3              // if i != 32, go to LOOP 0 
+
+// SUMMARY: r2 = 32 r3 =
+add r3, r3, #1              // r3 = 1
+ls r3, #7                   // r3 = 128 
+add r3, r3, #2              // r3 = 130 
+lw r3, r3                   // r3 = res counter 
+add r2, r2, #1              // r2 = 33 
+sw r3, r2                   // mem[33] = final result 
+
+// 3b SUMMARY: r2 = 33, r3 = counter, r4 = i (32), r1 = 4 
+// assembly for part 3b 
+ls r3, #7                   // reset so r3 = 0 
+ls r3, #7 
+
+ls r4, #7                   // r4 = 0 
+ls r4, #7 
+
+add r3, r3, #1              // r3 = 1
+ls r3, #7                   // r3 = 128 
+sw r4, r3                   // reset mem[128] to 0, for new i 
+add r3, r3, #1              // r3 = 129 
+sw r4, r3                   // reset mem[129] to be 0, for new j 
+
+// LOOP 5 
+OUTER_LOOP2: 
+lw r2, r4                   // r2 = mem[i]
+
+ls r4, #7                   // reset r4 = 0 for j 
+ls r4, #7 
+
+// LOOP 6 
+INNER_LOOP2: 
+ls r1, #7                   // reset so r1 = 0 
+ls r1, #7 
+add r1, r1, #3       
+add r1, r1, #3              
+add r1, r1, #1              // r1 = 7   
+
+ls r3, #7                   // reset so r3 = 0 
+ls r3, #7 
+
+bne r3, r4, r1              // if r4 "j" != 0, go to SHIFT2 
+add r1, r1, #1              // r1 = 8 
+bne r1, r4, r1              // if this line is reached, j = 0. So go to LOOP 8 SKIP2
+
+// LUT INDEX 7
+SHIFT2: 
+rs r2, #1                   // rs current byte by 1 
+
+// LUT INDEX 8
+SKIP2: 
+ls r1, #7                   // reset so r1 = 0
+ls r1, #7 
+add r1, r1, #1              // r1 = 1
+ls r1, #7                   // r1 = 128
+add r1, r1, #1              // r1 = 129
+add r4, r4, #1              // increment j 
+sw r4, r1                   // mem[129] = new j  
+
+ls r4, #7                   // r4 = 0 
+ls r4, #7 
+add r4, r4, #1              // r4 = 1
+ls r4, #4                   // r4 = 16
+add r4, r4, #3  
+add r4, r4, #3  
+add r4, r4, #3  
+add r4, r4, #3  
+add r4, r4, #3              // r4 = 31
+and r3, r2, r4              // get bottom 5 bits of data 
+add r4, r4, #1              // r4 = 32
+lw r1, r4                   // r1 = mem[32] = pattern 
+XOR r4, r1, r3              // check if pattern == bottom 5 bits of data
+
+
+ls r1, #7                   // reset so r1 = 0
+ls r1, #7       
+add r1, r1, #3              // r1 = 3
+add r1, r1, #3     
+add r1, r1, #3              // r1 = 9 
+ls r3, #7                   // r3 = 0
+ls r3, #7 
+bne r4, r3, r1               // if r4 != 0,  go to LOOP 9 NO MATCH2
+
+ls r4, #7                   // reset so r4 = 0 
+ls r4, #7 
+add r4, r4, #1              // r4 = 1
+ls r4, #5                   // r4 = 32 
+add r4, r4, #2              // r4 = 34 
+lw r3, r4                   // r3 = mem[34] (result counter)
+add r3, r3, #1              // increment counter 
+sw r3, r4                   // mem[34] = r3 (store updated counter)
+add r1, r1, #1              // r1 = 10 
+bne r4, r1, r1              // always go to LOOP 10 CHECK OUTER
+
+// LOOP 9 
+NO_MATCH2: 
+ls r4, #7                   // r4 = 0 
+ls r4, #7 
+add r4, r4, #1              // r4 = 1
+ls r4, #7                   // r4 = 128 
+add r4, r4, #1              // r4 = 129 
+lw r4, r4                   // r4 = j 
+ls r3, #7                   // r3 = 0 
+ls r3, #7 
+add r3, r3, #3  
+add r3, r3, #3              // r3 = 6
+ls r1, #7                   // r1 = 0 
+ls r1, #7 
+add r1, r1, #3
+add r1, r1, #1              // r1 = 4
+bne r4, r1, r3              // if j != 4, go to LOOP 6 INNER LOOP 2
+
+// LOOP 10 
+CHECK_OUTER: 
+ls r3, #7                   // reset so r3 = 0 
+ls r3, #7 
+add r3, r3, #1              // r3 = 1
+ls r3, #7                   // r3 = 128 
+lw r4, r3                   // r4 = i 
+add r4, r4, #1              // increment i 
+sw r4, r3                   // mem[128] = new i 
+
+ls r2, #7                   // r2 = 0 
+ls r2, #7 
+add r2, r2, #1              // r2 = 1
+ls r2, #5                   // r2 = 32
+
+ls r3, #7                   // r3 = 0 
+ls r3, #7 
+add r3, r3, #3 
+add r3, r3, #2              // r3 = 5
+
+bne r4, r2, r3              // if i != 32, go to LOOP 5 OUTER LOOP 2
+
+// part 3c
+// assembly for part 3c 
+ls r3, #7                       // reset so r3 = 0 
+ls r3, #7 
+
+ls r4, #7                       // r4 = 0 
+ls r4, #7 
+
+lw r2, r4                       // curr byte in r2
+
+add r4, r4, #1                  // increment i , i = 1
+
+add r3, r3, #1                  // r3 = 1
+ls r3, #7                       // r3 = 128 
+sw r4, r3                       // reset mem[128] to 1, for new i 
+
+// LOOP 11
+OUTER_LOOP3: 
+lw r3, r4                       // next byte in r3 = mem[i]
+ls r1, #7                       // r1 = 0 
+ls r1, #7 
+add r1, r1, #1                  // r1 = 1
+ls r1, #7                       // r1 = 128 
+
+// reset j 
+ls r4, #7                       // reset r4 = 0 for j 
+ls r4, #7 
+add r1, r1, #1                  // r1 = 129 
+sw r4, r1                       // j = 0 
+
+add r1, r1, #1                  // r1 = 130 
+sw r3, r1                       // store next byte at mem[130] for later use 
+
+// LOOP 12
+INNER_LOOP3: 
+ls r4, #7                       // r4 = 0 
+ls r4, #7 
+add r4, r4, #1                  // r4 = 1
+ls r4, #4                       // r4 = 16
+add r4, r4, #3  
+add r4, r4, #3  
+add r4, r4, #3  
+add r4, r4, #3  
+add r4, r4, #3                  // r4 = 31
+ls r4, #3                       // r4 = 248 
+and r3, r2, r4                  // get top 5 bits of data 
+rs r3, #3                       // shift so data is bottom 
+ls r4, #7 
+ls r4, #7 
+add r4, r4, #1                  // r4 = 1
+ls r4, #4                       // r4 = 16
+add r4, r4, #3  
+add r4, r4, #3  
+add r4, r4, #3  
+add r4, r4, #3  
+add r4, r4, #3                  // r4 = 31
+add r4, r4, #1                  // r4 = 32
+lw r1, r4                       // r1 = mem[32] = pattern 
+XOR r4, r1, r3                  // check if pattern == top 5 bits of data
+
+// check if match 
+ls r1, #7                       // reset so r1 = 0
+ls r1, #7       
+add r1, r1, #3                  // r1 = 3
+add r1, r1, #3     
+add r1, r1, #3            
+add r1, r1, #3          
+add r1, r1, #1                  // r1 = 13
+ls r3, #7                       // r3 = 0
+ls r3, #7 
+bne r4, r3, r1                  // if r4 != 0,  go to LOOP 13 NO MATCH3
+
+// update counter 
+ls r4, #7                       // reset so r4 = 0 
+ls r4, #7 
+add r4, r4, #1                  // r4 = 1
+ls r4, #5                       // r4 = 32 
+add r4, r4, #3                  // r4 = 35 
+lw r3, r4                       // r3 = mem[35] (result counter)
+add r3, r3, #1                  // increment counter 
+sw r3, r4                       // mem[35] = r3 (store updated counter)
+
+// LOOP 13 
+NO_MATCH3: 
+// reform curr byte based on next byte 
+ls r2, #1                       // rs curr byte by 1 
+ls r3, #7                       // r3 = 0 
+ls r3, #7 
+add r3, r3, #1                  // r3 = 1
+ls r3, #7                       // r3 = 128 
+add r3, r3, #2                  // r3 = 130 
+lw r4, r3                       // r4 = next byte = mem[130]
+rs r4, #7                       // shift next_byte to right by 7 to get MSB i.e MSB _ _ _ _ _ _ _ -> 0 0 0 0 0 0 0 MSB
+// ls r4, #7                       // shift so MSB is in top position 
+xor r2, r2, r4                  // r2 is now MSB of next byte + old r2 
+lw r4, r3                       // r4 = next byte = mem[130] again 
+ls r4, #1                       // ls next byte so new MSB 
+sw r4, r3                       // mem[130] = updated next byte 
+
+// check loop j 
+ls r3, #7                   // r3 = 0 
+ls r3, #7 
+add r3, r3, #1              // r3 = 1
+ls r3, #7                   // r3 = 128 
+add r3, r3, #1              // r3 = 129 
+lw r4, r3                   // r4 = j 
+add r4, r4, #1              // increment j 
+sw r4, r3                   // mem[129] = new j 
+ls r3, #7                   // r3 = 0 
+ls r3, #7 
+add r3, r3, #3  
+add r3, r3, #3              
+add r3, r3, #3              
+add r3, r3, #3              // r3 = 12
+ls r1, #7                   // r1 = 0 
+ls r1, #7 
+add r1, r1, #1              // r1 = 1
+ls r1, #3                   // r1 = 8 
+bne r4, r1, r3              // if j != 8, go to LOOP 12 INNER LOOP 3
+
+// check loop i 
+ls r3, #7                   // reset so r3 = 0 
+ls r3, #7 
+add r3, r3, #1              // r3 = 1
+ls r3, #7                   // r3 = 128 
+lw r4, r3                   // r4 = i 
+add r4, r4, #1              // increment i 
+sw r4, r3                   // mem[128] = new i 
+
+ls r1, #2                   // r1 = 32, because it was 8 before 
+
+ls r3, #7                   // r3 = 0 
+ls r3, #7 
+add r3, r3, #3 
+add r3, r3, #3           
+add r3, r3, #3   
+add r3, r3, #2                  // r3 = 11
+
+bne r4, r1, r3                  // re-iterate if i != 32
+
+// process last byte where curr_byte = mem[31]
+ls r1, #2                       // r1 = 128 
+ls r4, #7 
+ls r4, #7 
+sw r4, r1                       // mem[128] = i = 0 
+
+// LOOP 14 
+SEC_LOOP: 
+ls r4, #7                       // r4 = 0 
+ls r4, #7 
+add r4, r4, #1                  // r4 = 1
+ls r4, #4                       // r4 = 16
+add r4, r4, #3  
+add r4, r4, #3  
+add r4, r4, #3  
+add r4, r4, #3  
+add r4, r4, #3                  // r4 = 31
+ls r4, #3                       // r4 = 248 
+and r3, r2, r4                  // get top 5 bits of data 
+rs r3, #3 
+ls r4, #7                       // r4 = 0 
+ls r4, #7 
+add r4, r4, #1                  // r4 = 1
+ls r4, #4                       // r4 = 16
+add r4, r4, #3  
+add r4, r4, #3  
+add r4, r4, #3  
+add r4, r4, #3  
+add r4, r4, #3                  // r4 = 31
+add r4, r4, #1                  // r4 = 32
+lw r1, r4                       // r1 = mem[32] = pattern 
+XOR r4, r1, r3                  // check if pattern == bottom 5 bits of data
+
+// check if match 
+ls r1, #7                       // reset so r1 = 0
+ls r1, #7       
+add r1, r1, #3                  // r1 = 3
+add r1, r1, #3     
+add r1, r1, #3            
+add r1, r1, #3          
+add r1, r1, #3                  // r1 = 15
+ls r3, #7                       // r3 = 0
+ls r3, #7 
+bne r4, r3, r1                  // if r4 != 0,  go to LOOP 15 SEC NO MATCH
+
+// update counter 
+ls r4, #7                       // reset so r4 = 0 
+ls r4, #7 
+add r4, r4, #1                  // r4 = 1
+ls r4, #5                       // r4 = 32 
+add r4, r4, #3                  // r4 = 35 
+lw r3, r4                       // r3 = mem[35] (result counter)
+add r3, r3, #1                  // increment counter 
+sw r3, r4                       // mem[35] = r3 (store updated counter)
+
+// LOOP 15 
+SEC_NO_MATCH: 
+ls r2, #1 
+ls r1, #7                       // r1 = 0
+ls r1, #7 
+add r1, r1, #1                  // r1 = 1
+ls r1, #7                       // r1 = 128 
+lw r4, r1                       // r4 = index i 
+add r4, r4, #1                  // increment index 
+sw r4, r1 
+ls r1, #7                       // r1 = 0
+ls r1, #7 
+add r1, r1, #3                  
+add r1, r1, #1                  // r1 = 4
+ls r3, #7 
+ls r3, #7 
+add r3, r3, #3 
+add r3, r3, #3 
+add r3, r3, #3 
+add r3, r3, #3 
+add r3, r3, #2                  // r3 = 14
+bne r4, r1, r3                  // if index != 4, go to LOOP 14 
