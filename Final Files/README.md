@@ -1,3 +1,5 @@
+Did a live demo with Elbruz 6/13 11:45
+
 This document is a quick overview of the ISA, top_level and corresponding modules, and the assembly logic written in plain english. Moreover, this is for grading purposes
 ## Get it working
 
