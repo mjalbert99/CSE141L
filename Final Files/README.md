@@ -1,5 +1,11 @@
 This document is a quick overview of the ISA, top_level and corresponding modules, and the assembly logic written in plain english. Moreover, this is for grading purposes
+## Get it working
 
+* Change the file test_bench to the program test bench you want (Found in Test Benches).
+* Change mach_code.txt to the machine code for a program (Found in Machine Code).
+* Change the top_level program done number (Found under the Number as a comment)
+* Change the LUT table (Found as comments at the end of the lut file)
+* Change the memory.txt file to match the program memory (Found in Memories)
 ## ISA
 The ISA for this project is a 9-bit wide instruction code. We have 8 instructions (3-bits), 4 registers(2-bits each), and a combination fo 2-bit and 4-bit immediates we use based on the instruction. Theses are the following formats for each instruction (notes for each instruction will be provided underneath the format)
 

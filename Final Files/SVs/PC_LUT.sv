@@ -23,6 +23,7 @@ module PC_LUT #(parameter D=10, A = 8)(
 			13: target = 231;
 			14: target = 281;
 			15: target = 323;
+			16: target = 4;			// Program 1
 			default: target = 'b0;  // hold PC  
 		endcase
 	end
